@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "658153566059",
+    "project_id": "chad-ai-27020",
+    "storage_bucket": "chad-ai-27020.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658153566059:android:fddb95dbb1c698db07e62e",
+        "android_client_info": {
+          "package_name": "com.chadai.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3aHh-M-uPER-qt1gaLgSHy5yEXvhn57k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
