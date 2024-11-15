@@ -13,7 +13,7 @@ class LoginView extends StatelessWidget {
       body: const Column(
         children: [
           Text(
-            'children1',
+            'children 2',
             style: CustomTextStyle.w100,
           ),
         ],
