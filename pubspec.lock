@@ -57,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.0"
+  colorful_iconify_flutter:
+    dependency: transitive
+    description:
+      name: colorful_iconify_flutter
+      sha256: "3f9ee56343bfc7a48c41b4abb97b6fbb4e97ce017c6174a85898a3b709b881d7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   crypto:
     dependency: transitive
     description:
@@ -352,6 +360,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  iconify_flutter:
+    dependency: "direct main"
+    description:
+      name: iconify_flutter
+      sha256: ad331a480c49284e3fb66a3896f04a9afa368147b0131897feff6aa0a8397ddb
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.7"
   intl:
     dependency: "direct main"
     description:
@@ -432,6 +448,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  panara_dialogs:
+    dependency: "direct main"
+    description:
+      name: panara_dialogs
+      sha256: "43047f996ae8b16130879da4e67f03b5b3df3071b879efe32667d139bc35b35f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.5"
   path:
     dependency: transitive
     description:
@@ -504,6 +528,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.2"
+  pinput:
+    dependency: "direct main"
+    description:
+      name: pinput
+      sha256: "7bf9aa7d0eeb3da9f7d49d2087c7bc7d36cd277d2e94cc31c6da52e1ebb048d0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.0"
   platform:
     dependency: transitive
     description:
@@ -605,6 +637,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
+  universal_platform:
+    dependency: transitive
+    description:
+      name: universal_platform
+      sha256: "64e16458a0ea9b99260ceb5467a214c1f298d647c659af1bff6d3bf82536b1ec"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   uuid:
     dependency: "direct main"
     description:

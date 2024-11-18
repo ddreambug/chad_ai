@@ -1,0 +1,28 @@
+import 'package:chad_ai/constants/cores/assets/image_constant.dart';
+import 'package:chad_ai/shared/widgets/custom_button.dart';
+import 'package:flutter/material.dart';
+
+class SocialLoginButton extends StatelessWidget {
+  const SocialLoginButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        CustomButton(
+          onPress: () {},
+          platformIcon: ImageConstant.icGoogle,
+          title: 'Google',
+        ),
+        Spacer(),
+        CustomButton(
+          onPress: () {},
+          platformIcon: ImageConstant.icFacebook,
+          title: 'Facebook',
+        ),
+      ],
+    );
+  }
+}

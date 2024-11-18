@@ -1,4 +1,5 @@
 import 'package:chad_ai/configs/routes/main_route.dart';
+import 'package:chad_ai/features/login/bindings/login_bindings.dart';
 import 'package:chad_ai/features/login/views/ui/login_view.dart';
 import 'package:get/get.dart';
 
@@ -7,6 +8,7 @@ abstract class MainPage {
     GetPage(
       name: MainRoute.login,
       page: () => const LoginView(),
+      binding: LoginBinding(),
     ),
   ];
 }
