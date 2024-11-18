@@ -52,4 +52,10 @@ class GlobalController extends GetxController {
       );
     }
   }
+
+  void webView({bool termsOfUse = false}) {
+    termsOfUse
+        ? Get.toNamed(MainRoute.termsOfUse)
+        : Get.toNamed(MainRoute.privacyPolicy);
+  }
 }

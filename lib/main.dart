@@ -16,7 +16,7 @@ void main() async {
   await initializeDateFormatting('id_ID', null);
 
   //hive init
-  final dir = await getApplicationDocumentsDirectory();
+   final dir = await getApplicationDocumentsDirectory();
   await Hive.initFlutter(dir.path);
   await Hive.openBox("chad_ai");
   HiveService.initHiveUser();

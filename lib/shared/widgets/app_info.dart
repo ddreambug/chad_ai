@@ -1,4 +1,5 @@
 import 'package:chad_ai/configs/themes/main_color.dart';
+import 'package:chad_ai/global_controllers/global_controller.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +10,7 @@ class AppInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 60.w,
+      height: 61.w,
       width: 193.w,
       child: Column(
         children: [
@@ -27,24 +28,41 @@ class AppInfo extends StatelessWidget {
               color: MainColor.textGrey,
             ),
           ),
-          RichText(
-            text: TextSpan(
-              style: CustomTextStyle.w500.copyWith(
-                fontSize: 14.sp,
-                color: MainColor.textGrey,
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  GlobalController.to.webView(termsOfUse: true);
+                },
+                child: Text(
+                  'Terms of Use',
+                  style: CustomTextStyle.w500.copyWith(
+                    fontSize: 14.sp,
+                    color: MainColor.textGrey,
+                  ),
+                ),
               ),
-              children: [
-                TextSpan(
-                  text: 'Terms of Use',
+              Text(
+                '   |   ',
+                style: CustomTextStyle.w500.copyWith(
+                  fontSize: 14.sp,
+                  color: MainColor.textGrey,
                 ),
-                TextSpan(
-                  text: '   |   ',
+              ),
+              GestureDetector(
+                onTap: () {
+                  GlobalController.to.webView();
+                },
+                child: Text(
+                  'Privacy Policy',
+                  style: CustomTextStyle.w500.copyWith(
+                    fontSize: 14.sp,
+                    color: MainColor.textGrey,
+                  ),
                 ),
-                TextSpan(
-                  text: 'Privacy policy',
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
