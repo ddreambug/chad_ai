@@ -1,4 +1,4 @@
-package com.chad_ai.app
+package com.chadai.app
 
 import io.flutter.embedding.android.FlutterActivity
 

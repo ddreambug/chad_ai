@@ -24,6 +24,7 @@ class LoginHeader extends StatelessWidget {
         GestureDetector(
           onTap: () {
             LoginController.to.showDialog(context, DialogType.signup);
+            LoginController.to.clearControllerState();
           },
           child: RichText(
             text: TextSpan(

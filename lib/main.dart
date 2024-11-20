@@ -1,8 +1,11 @@
 import 'package:chad_ai/configs/pages/main_page.dart';
 import 'package:chad_ai/configs/routes/main_route.dart';
 import 'package:chad_ai/configs/themes/main_theme.dart';
+import 'package:chad_ai/firebase_options.dart';
 import 'package:chad_ai/global_bindings/global_binding.dart';
+import 'package:chad_ai/global_controllers/analytics_controller.dart';
 import 'package:chad_ai/utils/services/hive_service.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -13,13 +16,18 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await initializeDateFormatting('id_ID', null);
 
   //hive init
-   final dir = await getApplicationDocumentsDirectory();
+  final dir = await getApplicationDocumentsDirectory();
   await Hive.initFlutter(dir.path);
   await Hive.openBox("chad_ai");
   HiveService.initHiveUser();
+
+  //firebase analytic init
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  Get.put(AnalyticsController());
 
   //sentry init
   await SentryFlutter.init(
@@ -33,7 +41,6 @@ void main() async {
 
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.dumpErrorToConsole(details);
-    // Optionally send error details to a remote server for debugging
   };
 
   runApp(const MyApp());

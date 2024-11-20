@@ -1,6 +1,8 @@
 import 'package:chad_ai/configs/themes/main_color.dart';
+import 'package:chad_ai/features/login/controllers/login_controller.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,12 +12,16 @@ class CustomTextField extends StatelessWidget {
     super.key,
     this.iconifyIcon = '',
     this.hintText = '',
-    this.needObscure = false,
+    this.obscureType = '',
+    required this.controller,
+    this.validator,
   });
 
+  final TextEditingController controller;
   final String iconifyIcon;
   final String hintText;
-  final bool needObscure;
+  final String obscureType;
+  final FormFieldValidator<String>? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -37,27 +43,58 @@ class CustomTextField extends StatelessWidget {
             ),
             SizedBox(width: 15.w),
             Expanded(
-              child: TextField(
-                decoration: InputDecoration(
-                  isDense: true,
-                  hintText: hintText,
-                  hintStyle: CustomTextStyle.w500.copyWith(
-                    fontSize: 16.sp,
-                    color: MainColor.textGrey,
-                  ),
-                ),
-                style: CustomTextStyle.w500.copyWith(
-                  fontSize: 16.sp,
-                ),
+              child: Obx(
+                () {
+                  var isObscure = LoginController.to.obscureStates[obscureType];
+                  var pinLength = LoginController.to.pinLength.value;
+
+                  return TextFormField(
+                    controller: controller,
+                    obscureText: obscureType != '' ? isObscure! : false,
+                    validator: validator,
+                    maxLength: obscureType == 'pin' ? 4 : null,
+                    style: CustomTextStyle.w500.copyWith(fontSize: 16.sp),
+                    onChanged: (value) => obscureType == 'pin'
+                        ? LoginController.to.pinLength.value =
+                            controller.text.length
+                        : null,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      counterText: '',
+                      suffixText: obscureType == 'pin' ? '$pinLength/4' : null,
+                      hintText: hintText,
+                      hintStyle: CustomTextStyle.w500.copyWith(
+                        fontSize: 16.sp,
+                        color: MainColor.textGrey,
+                      ),
+                      errorStyle: CustomTextStyle.w500.copyWith(
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
-            SizedBox(width: 15.w),
-            if (needObscure) ...{
-              Iconify(
-                Ri.eye_line,
-                color: MainColor.purple,
-                size: 28.w,
-              )
+            if (obscureType != '') ...{
+              Obx(
+                () {
+                  var isObscure = LoginController.to.obscureStates[obscureType];
+
+                  return GestureDetector(
+                    onTap: () {
+                      LoginController.to.toggleObscure(obscureType);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 5.w),
+                      child: Iconify(
+                        isObscure ?? true ? Ri.eye_line : Ri.eye_off_line,
+                        color: MainColor.purple,
+                        size: 28.w,
+                      ),
+                    ),
+                  );
+                },
+              ),
             }
           ],
         ),

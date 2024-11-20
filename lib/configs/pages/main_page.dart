@@ -1,4 +1,5 @@
 import 'package:chad_ai/configs/routes/main_route.dart';
+import 'package:chad_ai/features/chat/views/ui/chat_view.dart';
 import 'package:chad_ai/features/login/bindings/login_bindings.dart';
 import 'package:chad_ai/features/login/views/ui/login_view.dart';
 import 'package:chad_ai/shared/widgets/privacy_policy.dart';
@@ -20,6 +21,10 @@ abstract class MainPage {
       page: () => const PrivacyPolicy(
         termsOfUse: true,
       ),
-    )
+    ),
+    GetPage(
+      name: MainRoute.chat,
+      page: () => const ChatView(),
+    ),
   ];
 }

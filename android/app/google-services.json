@@ -12,7 +12,20 @@
           "package_name": "com.chadai.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "658153566059-gn6oq6e86h01dh9lr4dp22faijjt432a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chadai.app",
+            "certificate_hash": "9ddb84a79133457a13f094cce90b8bf6f0f4ab98"
+          }
+        },
+        {
+          "client_id": "658153566059-5e63hkeu4clt20r4lbbmdrfk0q098vjv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC3aHh-M-uPER-qt1gaLgSHy5yEXvhn57k"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "658153566059-5e63hkeu4clt20r4lbbmdrfk0q098vjv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "658153566059-ci5n09ktlcref1pt1rqmiddm7ea2cfaa.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chadAi"
+              }
+            }
+          ]
         }
       }
     }
