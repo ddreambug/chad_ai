@@ -22,7 +22,9 @@ class SocialLoginButton extends StatelessWidget {
         ),
         Spacer(),
         CustomButton(
-          onPress: () {},
+          onPress: () async {
+            var login = await LoginController.to.signInWithFacebook(context);
+          },
           platformIcon: ImageConstant.icFacebook,
           title: 'Facebook',
         ),

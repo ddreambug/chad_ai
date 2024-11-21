@@ -1,9 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    
-    
-    
+        
     <uses-permission android:name="android.permission.INTERNET"/>
-
     
     <application
         android:label="Chad Ai"
@@ -36,6 +33,12 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="1576221676342307"/>
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="aec22b999f5cec7c02e3f5767e37f79c" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

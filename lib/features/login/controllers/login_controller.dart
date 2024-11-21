@@ -1,4 +1,3 @@
-import 'package:chad_ai/configs/routes/main_route.dart';
 import 'package:chad_ai/configs/themes/main_color.dart';
 import 'package:chad_ai/features/login/views/components/otp_dialog.dart';
 import 'package:chad_ai/features/login/views/components/sign_up_dialog.dart';
@@ -9,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class LoginController extends GetxController {
   static LoginController get to => Get.find();
@@ -72,7 +72,6 @@ class LoginController extends GetxController {
     await GlobalController.to.checkConnection();
 
     if (GlobalController.to.isConnect.value == true) {
-      print('masuk1');
       try {
         final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
         if (googleUser == null) return "modal dialog closed";
@@ -84,20 +83,14 @@ class LoginController extends GetxController {
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
-        print('goggleauth done');
-        print('AccessToken: ${googleAuth.accessToken}');
-        print('IDToken: ${googleAuth.idToken}');
 
         try {
           UserCredential userData =
               await FirebaseAuth.instance.signInWithCredential(
             credential,
           );
-          print('firebaseauth done');
           Get.offNamed('chat');
-        } catch (e) {
-          print('FirebaseAuth error: $e');
-        }
+        } catch (e) {}
 
         // print('success login, data: $userData');
         // var response = await LoginRepository().login(
@@ -142,6 +135,26 @@ class LoginController extends GetxController {
       }
     } else if (GlobalController.to.isConnect.value == false) {
       print('internet is not connected');
+    }
+  }
+
+  Future<dynamic> signInWithFacebook(BuildContext context) async {
+    print('facebook onclick');
+    // Trigger the sign-in flow
+    final LoginResult loginResult = await FacebookAuth.instance.login();
+    print('LoginResult: ${loginResult.status}, ${loginResult.message}');
+
+    // Create a credential from the access token
+    final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
+
+    // Once signed in, return the UserCredential
+    try {
+      UserCredential userData = await FirebaseAuth.instance
+          .signInWithCredential(facebookAuthCredential);
+      Get.offNamed('chat');
+    } catch (e) {
+      print('error: $e');
     }
   }
 }
