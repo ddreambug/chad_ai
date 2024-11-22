@@ -24,6 +24,7 @@ class SocialLoginButton extends StatelessWidget {
         CustomButton(
           onPress: () async {
             var login = await LoginController.to.signInWithFacebook(context);
+            print('google button triggered $login');
           },
           platformIcon: ImageConstant.icFacebook,
           title: 'Facebook',

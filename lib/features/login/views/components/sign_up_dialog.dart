@@ -64,8 +64,8 @@ class SignUpDialog extends StatelessWidget {
                       return 'Please enter an email';
                     }
                     if (!RegExp(
-                            r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
-                        .hasMatch(value)) {
+                      r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+                    ).hasMatch(value)) {
                       return 'Please enter a valid email';
                     }
                     return null;
@@ -80,6 +80,8 @@ class SignUpDialog extends StatelessWidget {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a password';
+                    } else if (value.length < 8) {
+                      return 'Must be at least 8 character';
                     }
                     return null;
                   },
@@ -93,6 +95,9 @@ class SignUpDialog extends StatelessWidget {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please retype password';
+                    } else if (value !=
+                        LoginController.to.passwordController.text) {
+                      return 'Password didnt match';
                     }
                     return null;
                   },
@@ -122,9 +127,11 @@ class SignUpDialog extends StatelessWidget {
                     ),
                     Spacer(),
                     CustomButton(
-                      onPress: () {
+                      onPress: () async {
                         if (formKey.currentState?.validate() ?? false) {
                           print('Sign Up form is valid!');
+                          await LoginController.to.sendEmailOtp();
+
                           Get.dialog(OtpDialog());
                         } else {
                           print('Sign Up form is invalid!');

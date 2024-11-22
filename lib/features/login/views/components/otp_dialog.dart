@@ -56,7 +56,7 @@ class OtpDialog extends StatelessWidget {
                   pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                   keyboardType: TextInputType.number,
                   validator: (value) {
-                    if (value != "1234") {
+                    if (value != LoginController.to.otpValue.value) {
                       LoginController.to.otpTextController.clear();
                       return "Wrong OTP Code!";
                     }
@@ -106,7 +106,9 @@ class OtpDialog extends StatelessWidget {
                   ),
                   Spacer(),
                   CustomButton(
-                    onPress: () {},
+                    onPress: () {
+                      LoginController.to.sendEmailOtp();
+                    },
                     title: 'Resend',
                     buttonWidth: 142,
                     buttonColor: MainColor.black,

@@ -1,19 +1,24 @@
 import 'package:chad_ai/configs/themes/main_color.dart';
+import 'package:chad_ai/features/login/repositories/login_repository.dart';
 import 'package:chad_ai/features/login/views/components/otp_dialog.dart';
 import 'package:chad_ai/features/login/views/components/sign_up_dialog.dart';
 import 'package:chad_ai/global_controllers/global_controller.dart';
 import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:email_otp/email_otp.dart';
 
 class LoginController extends GetxController {
   static LoginController get to => Get.find();
 
-  RxString emailValue = 'kosong@gmail.com'.obs;
+  RxString emailValue = ''.obs;
+  RxString otpValue = ''.obs;
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -28,33 +33,6 @@ class LoginController extends GetxController {
     'pin': true,
   }.obs;
 
-  void toggleObscure(String fieldKey) {
-    obscureStates[fieldKey] = !(obscureStates[fieldKey] ?? true);
-  }
-
-  void onOtpComplete(BuildContext context, String value) {
-    if (value == "1234") {
-      otpTextController.clear();
-      Get.back();
-      Get.snackbar(
-        "Success",
-        "OTP code valid",
-        backgroundColor: MainColor.black,
-        duration: const Duration(seconds: 2),
-      );
-    }
-  }
-
-  void showDialog(BuildContext context, DialogType type) {
-    if (type == DialogType.signup) {
-      Get.dialog(SignUpDialog());
-    } else if (type == DialogType.otp) {
-      Get.dialog(OtpDialog());
-    } else {
-      print('wrong type');
-    }
-  }
-
   void clearControllerState() {
     usernameController.clear();
     emailController.clear();
@@ -68,93 +46,166 @@ class LoginController extends GetxController {
     obscureStates['pin'] = true;
   }
 
-  Future<dynamic> signInWithGoogle(BuildContext context) async {
+  void toggleObscure(String fieldKey) {
+    obscureStates[fieldKey] = !(obscureStates[fieldKey] ?? true);
+  }
+
+  Future<void> _handleAuthError(
+    Object exception,
+    StackTrace stacktrace,
+  ) async {
+    await Sentry.captureException(
+      exception,
+      stackTrace: stacktrace,
+    );
+  }
+
+  Future<bool> _checkInternetConnection() async {
     await GlobalController.to.checkConnection();
+    return GlobalController.to.isConnect.value;
+  }
 
-    if (GlobalController.to.isConnect.value == true) {
+  Future<void> _navigateToChat() async {
+    Get.offNamed('chat');
+  }
+
+  void onOtpComplete(BuildContext context, String value) async {
+    if (value == EmailOTP.getOTP()) {
       try {
-        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-        if (googleUser == null) return "modal dialog closed";
-
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
-
-        final credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
+        var response = await LoginRepository().login(
+          username: usernameController.text,
+          email: emailController.text,
+          password: passwordController.text,
+          pin: int.parse(pinController.text),
         );
 
-        try {
-          UserCredential userData =
-              await FirebaseAuth.instance.signInWithCredential(
-            credential,
+        if (response['status_code'] == 201) {
+          addUser(
+            nama: usernameController.text,
+            email: emailController.text,
+            password: passwordController.text,
+            pin: int.parse(pinController.text),
           );
-          Get.offNamed('chat');
-        } catch (e) {}
 
-        // print('success login, data: $userData');
-        // var response = await LoginRepository().login(
-        //   userData.user!.email!,
-        //   userData.user!.displayName!,
-        //   true,
-        // );
+          otpTextController.clear();
+          Get.back();
+          Get.back();
+          //   Get.until((route) => Get.currentRoute == '/login');
 
-        // if (response['status_code'] == 200) {
-        //   await addUser(
-        //     nama: userData.user!.displayName!,
-        //     tanggalLahir: '12/12/2012',
-        //     nomorTelepon: '08224111400',
-        //     alamatEmail: userData.user!.email!,
-        //     pin: '111111',
-        //     foto: userData.user!.photoURL!,
-        //     token: userData.credential!.token.toString(),
-        //   );
-        //   Get.offNamed('/search-location');
-        // } else if (response['status_code'] == 422) {
-        //   Get.snackbar(
-        //     "Error",
-        //     "Server error",
-        //     backgroundColor: MainColor.black,
-        //     duration: const Duration(seconds: 2),
-        //   );
-        // } else {
-        //   Get.snackbar(
-        //     "Try again",
-        //     "Error might occured",
-        //     backgroundColor: MainColor.black,
-        //     duration: const Duration(seconds: 2),
-        //   );
-        // }
-
-        // return response;
-      } catch (exception, stacktrace) {
-        await Sentry.captureException(
-          exception,
-          stackTrace: stacktrace,
-        );
+          Get.snackbar(
+            "Success",
+            "OTP code valid",
+            backgroundColor: MainColor.black,
+            duration: const Duration(seconds: 2),
+          );
+        }
+      } catch (e, stacktrace) {
+        _handleAuthError(e, stacktrace);
       }
-    } else if (GlobalController.to.isConnect.value == false) {
-      print('internet is not connected');
+    }
+  }
+
+  void showDialog(BuildContext context, DialogType type) {
+    if (type == DialogType.signup) {
+      Get.dialog(SignUpDialog());
+    } else if (type == DialogType.otp) {
+      Get.dialog(OtpDialog());
+    } else {
+      print('wrong type');
+    }
+  }
+
+  Future<void> sendEmailOtp() async {
+    LoginController.to.emailValue.value =
+        LoginController.to.emailController.text;
+
+    EasyLoading.show();
+    var otpToken = await EmailOTP.sendOTP(email: emailValue.value);
+
+    if (otpToken) {
+      otpValue.value = EmailOTP.getOTP()!;
+      Get.snackbar(
+        "Check your email",
+        "OTP has been sent!",
+        backgroundColor: MainColor.black,
+        duration: const Duration(seconds: 2),
+      );
+      EasyLoading.dismiss();
+    } else {
+      Get.snackbar(
+        "Failed",
+        "Error Occured. OTP is not sent",
+        backgroundColor: MainColor.black,
+        duration: const Duration(seconds: 2),
+      );
+    }
+  }
+
+  Future<dynamic> signInWithGoogle(BuildContext context) async {
+    if (!await _checkInternetConnection()) {
+      print('Internet is not connected');
+      return;
+    }
+
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) return "modal dialog closed";
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      await _navigateToChat();
+    } catch (e, stacktrace) {
+      await _handleAuthError(e, stacktrace);
     }
   }
 
   Future<dynamic> signInWithFacebook(BuildContext context) async {
-    print('facebook onclick');
-    // Trigger the sign-in flow
-    final LoginResult loginResult = await FacebookAuth.instance.login();
-    print('LoginResult: ${loginResult.status}, ${loginResult.message}');
-
-    // Create a credential from the access token
-    final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
-
-    // Once signed in, return the UserCredential
-    try {
-      UserCredential userData = await FirebaseAuth.instance
-          .signInWithCredential(facebookAuthCredential);
-      Get.offNamed('chat');
-    } catch (e) {
-      print('error: $e');
+    if (!await _checkInternetConnection()) {
+      print('Internet is not connected');
+      return;
     }
+
+    try {
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+
+      if (loginResult.status == LoginStatus.success) {
+        final OAuthCredential facebookAuthCredential =
+            FacebookAuthProvider.credential(
+          loginResult.accessToken!.tokenString,
+        );
+
+        await FirebaseAuth.instance
+            .signInWithCredential(facebookAuthCredential);
+        await _navigateToChat();
+      } else {
+        print('Facebook Login Failed: ${loginResult.message}');
+      }
+    } catch (e, stacktrace) {
+      await _handleAuthError(e, stacktrace);
+    }
+  }
+
+  Future<void> addUser({
+    required String nama,
+    required String email,
+    required String password,
+    required int pin,
+  }) async {
+    // Open the Hive box
+    var box = Hive.box('chad_ai');
+
+    // Store user data in the Hive box
+    await box.put('username', nama);
+    await box.put('email', email);
+    await box.put('password', password);
+    await box.put('pin', pin);
   }
 }
