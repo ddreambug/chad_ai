@@ -4,6 +4,7 @@ import 'package:chad_ai/utils/services/dio_service.dart';
 class LoginRepository {
   final dio = DioService().getDio();
 
+  //note<
   Future<Map<String, dynamic>> login({
     required String username,
     required String email,
@@ -13,7 +14,7 @@ class LoginRepository {
   }) async {
     try {
       final response = await dio.post(
-        'https://67316a387aaf2a9aff10911d.mockapi.io/users',
+        '/users',
         data: {
           "username": username,
           "email": email,

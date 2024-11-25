@@ -44,12 +44,12 @@ class SignUpDialog extends StatelessWidget {
                 ),
                 SizedBox(height: 25.w),
                 CustomTextField(
-                  hintText: 'Username',
+                  hintText: 'Name',
                   controller: LoginController.to.usernameController,
                   iconifyIcon: IconParkSolid.people,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a username';
+                      return 'Please enter your name';
                     }
                     return null;
                   },

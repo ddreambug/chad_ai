@@ -37,17 +37,17 @@ class AppInfo extends StatelessWidget {
                 },
                 child: Text(
                   'Terms of Use',
-                  style: CustomTextStyle.w500.copyWith(
+                  style: CustomTextStyle.w700.copyWith(
                     fontSize: 14.sp,
-                    color: MainColor.textGrey,
+                    color: MainColor.black,
                   ),
                 ),
               ),
               Text(
-                '   |   ',
-                style: CustomTextStyle.w500.copyWith(
+                '    |    ',
+                style: CustomTextStyle.w600.copyWith(
                   fontSize: 14.sp,
-                  color: MainColor.textGrey,
+                  color: MainColor.black,
                 ),
               ),
               GestureDetector(
@@ -56,9 +56,9 @@ class AppInfo extends StatelessWidget {
                 },
                 child: Text(
                   'Privacy Policy',
-                  style: CustomTextStyle.w500.copyWith(
+                  style: CustomTextStyle.w700.copyWith(
                     fontSize: 14.sp,
-                    color: MainColor.textGrey,
+                    color: MainColor.black,
                   ),
                 ),
               ),

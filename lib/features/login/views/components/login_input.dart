@@ -4,6 +4,7 @@ import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:chad_ai/shared/widgets/custom_text_field.dart';
 import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconify_flutter/icons/majesticons.dart';
 import 'package:iconify_flutter/icons/material_symbols.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -72,6 +73,7 @@ class LoginInput extends StatelessWidget {
               onPressed: () {
                 if (formKey.currentState?.validate() ?? false) {
                   print('Form is valid!');
+                  Get.offNamed('/chat');
                 } else {
                   print('Form is invalid!');
                 }

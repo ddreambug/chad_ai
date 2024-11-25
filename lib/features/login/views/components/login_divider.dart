@@ -18,7 +18,7 @@ class LoginDivider extends StatelessWidget {
           ),
         ),
         Text(
-          'Or login with',
+          'or login with',
           style: CustomTextStyle.w400.copyWith(
             color: MainColor.textGrey,
             fontSize: 16.sp,

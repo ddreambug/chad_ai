@@ -69,42 +69,6 @@ class LoginController extends GetxController {
     Get.offNamed('chat');
   }
 
-  void onOtpComplete(BuildContext context, String value) async {
-    if (value == EmailOTP.getOTP()) {
-      try {
-        var response = await LoginRepository().login(
-          username: usernameController.text,
-          email: emailController.text,
-          password: passwordController.text,
-          pin: int.parse(pinController.text),
-        );
-
-        if (response['status_code'] == 201) {
-          addUser(
-            nama: usernameController.text,
-            email: emailController.text,
-            password: passwordController.text,
-            pin: int.parse(pinController.text),
-          );
-
-          otpTextController.clear();
-          Get.back();
-          Get.back();
-          //   Get.until((route) => Get.currentRoute == '/login');
-
-          Get.snackbar(
-            "Success",
-            "OTP code valid",
-            backgroundColor: MainColor.black,
-            duration: const Duration(seconds: 2),
-          );
-        }
-      } catch (e, stacktrace) {
-        _handleAuthError(e, stacktrace);
-      }
-    }
-  }
-
   void showDialog(BuildContext context, DialogType type) {
     if (type == DialogType.signup) {
       Get.dialog(SignUpDialog());
@@ -115,6 +79,7 @@ class LoginController extends GetxController {
     }
   }
 
+  /// Email OTP validation
   Future<void> sendEmailOtp() async {
     LoginController.to.emailValue.value =
         LoginController.to.emailController.text;
@@ -141,6 +106,43 @@ class LoginController extends GetxController {
     }
   }
 
+  void onOtpComplete(BuildContext context, String value) async {
+    if (value == EmailOTP.getOTP()) {
+      try {
+        var response = await LoginRepository().login(
+          username: usernameController.text,
+          email: emailController.text,
+          password: passwordController.text,
+          pin: int.parse(pinController.text),
+        );
+
+        if (response['status_code'] == 201) {
+          addUser(
+            nama: usernameController.text,
+            email: emailController.text,
+            password: passwordController.text,
+            pin: int.parse(pinController.text),
+          );
+
+          otpTextController.clear();
+          Get.back();
+          Get.back();
+          //   Get.until((route) => Get.currentRoute == '/login');
+
+          Get.snackbar(
+            "Success",
+            "Registration Success",
+            backgroundColor: MainColor.black,
+            duration: const Duration(seconds: 2),
+          );
+        }
+      } catch (e, stacktrace) {
+        _handleAuthError(e, stacktrace);
+      }
+    }
+  }
+
+  /// Social Sign-In
   Future<dynamic> signInWithGoogle(BuildContext context) async {
     if (!await _checkInternetConnection()) {
       print('Internet is not connected');
@@ -161,6 +163,14 @@ class LoginController extends GetxController {
 
       await FirebaseAuth.instance.signInWithCredential(credential);
 
+      await LoginRepository().login(
+        username: googleUser.displayName!,
+        email: googleUser.email,
+        password: '',
+        pin: 1111,
+        isGoogle: true,
+      );
+
       await _navigateToChat();
     } catch (e, stacktrace) {
       await _handleAuthError(e, stacktrace);
@@ -174,35 +184,35 @@ class LoginController extends GetxController {
     }
 
     try {
-      final LoginResult loginResult = await FacebookAuth.instance.login();
+      final LoginResult facebookUser = await FacebookAuth.instance.login();
 
-      if (loginResult.status == LoginStatus.success) {
+      if (facebookUser.status == LoginStatus.success) {
         final OAuthCredential facebookAuthCredential =
             FacebookAuthProvider.credential(
-          loginResult.accessToken!.tokenString,
+          facebookUser.accessToken!.tokenString,
         );
 
         await FirebaseAuth.instance
             .signInWithCredential(facebookAuthCredential);
+
         await _navigateToChat();
       } else {
-        print('Facebook Login Failed: ${loginResult.message}');
+        print('Facebook Login Failed: ${facebookUser.message}');
       }
     } catch (e, stacktrace) {
       await _handleAuthError(e, stacktrace);
     }
   }
 
+  /// Store user data in the Hive box
   Future<void> addUser({
     required String nama,
     required String email,
     required String password,
     required int pin,
   }) async {
-    // Open the Hive box
     var box = Hive.box('chad_ai');
 
-    // Store user data in the Hive box
     await box.put('username', nama);
     await box.put('email', email);
     await box.put('password', password);

@@ -8,7 +8,7 @@ class GlobalController extends GetxController {
 
   /// API
   var isStaging = false.obs;
-  var baseUrl = 'https://mockapi.io/projects/67316a387aaf2a9aff10911e';
+  var baseUrl = 'https://67316a387aaf2a9aff10911d.mockapi.io';
 
   /// Location property
   RxString statusLocation = RxString('loading');

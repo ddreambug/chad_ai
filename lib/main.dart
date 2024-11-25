@@ -7,7 +7,7 @@ import 'package:chad_ai/global_controllers/analytics_controller.dart';
 import 'package:chad_ai/utils/services/hive_service.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -26,7 +26,6 @@ void main() async {
     otpType: OTPType.numeric,
     otpLength: 4,
     emailTheme: EmailTheme.v6,
-    appEmail: 'kamandaka25@gmail.com',
   );
 
   //hive init
@@ -52,6 +51,11 @@ void main() async {
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.dumpErrorToConsole(details);
   };
+
+  //Easyloading config
+  EasyLoading.instance
+    ..loadingStyle = EasyLoadingStyle.light
+    ..indicatorType = EasyLoadingIndicatorType.ring;
 
   runApp(const MyApp());
 }
