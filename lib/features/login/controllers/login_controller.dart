@@ -27,6 +27,10 @@ class LoginController extends GetxController {
   TextEditingController otpTextController = TextEditingController();
   TextEditingController chatInputController = TextEditingController();
   RxInt pinLength = 0.obs;
+  final FocusNode focusNode = FocusNode();
+  final RxBool isFocused = false.obs;
+  final RxString? errorText = RxString('');
+
   var obscureStates = {
     'password': true,
     'rePassword': true,
@@ -116,7 +120,7 @@ class LoginController extends GetxController {
           pin: int.parse(pinController.text),
         );
 
-        if (response['status_code'] == 201) {
+        if (response.statusCode == 201) {
           addUser(
             nama: usernameController.text,
             email: emailController.text,

@@ -11,6 +11,7 @@ class MainColor {
   static const Color warning = Color(0xffffc107);
   static const Color info = Color(0xff17a2b8);
 
+  static const Color blue = Color.fromARGB(255, 48, 190, 212);
   static const Color white = Color(0xffffffff);
   static const Color black = Color(0xff0A0A0A);
   static const Color grey = Color(0xffBBBBBB);

@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppInfo extends StatelessWidget {
-  const AppInfo({super.key});
+  const AppInfo({
+    super.key,
+    this.showVersion = false,
+  });
+
+  final bool showVersion;
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +19,15 @@ class AppInfo extends StatelessWidget {
       width: 193.w,
       child: Column(
         children: [
-          Text(
-            'Chad Ai - Version 1.0.0',
-            style: CustomTextStyle.w500.copyWith(
-              fontSize: 14.sp,
-              color: MainColor.textGrey,
+          if (showVersion) ...{
+            Text(
+              'Chad Ai - Version 1.0.0',
+              style: CustomTextStyle.w500.copyWith(
+                fontSize: 14.sp,
+                color: MainColor.textGrey,
+              ),
             ),
-          ),
+          },
           Text(
             'Powered by Gemini',
             style: CustomTextStyle.w500.copyWith(
@@ -37,15 +44,16 @@ class AppInfo extends StatelessWidget {
                 },
                 child: Text(
                   'Terms of Use',
-                  style: CustomTextStyle.w700.copyWith(
+                  style: CustomTextStyle.w600.copyWith(
                     fontSize: 14.sp,
                     color: MainColor.black,
+                    letterSpacing: -0.8,
                   ),
                 ),
               ),
               Text(
                 '    |    ',
-                style: CustomTextStyle.w600.copyWith(
+                style: CustomTextStyle.w500.copyWith(
                   fontSize: 14.sp,
                   color: MainColor.black,
                 ),
@@ -56,9 +64,10 @@ class AppInfo extends StatelessWidget {
                 },
                 child: Text(
                   'Privacy Policy',
-                  style: CustomTextStyle.w700.copyWith(
+                  style: CustomTextStyle.w600.copyWith(
                     fontSize: 14.sp,
                     color: MainColor.black,
+                    letterSpacing: -0.8,
                   ),
                 ),
               ),

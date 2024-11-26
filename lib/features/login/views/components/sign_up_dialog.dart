@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:iconify_flutter/icons/icon_park_solid.dart';
 import 'package:iconify_flutter/icons/majesticons.dart';
 import 'package:iconify_flutter/icons/material_symbols.dart';
+import 'package:panara_dialogs/panara_dialogs.dart';
 
 class SignUpDialog extends StatelessWidget {
   const SignUpDialog({super.key});
@@ -23,7 +24,7 @@ class SignUpDialog extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: Container(
-          height: 520.h,
+          height: 620.h,
           width: 350.w,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30.r),
@@ -111,6 +112,8 @@ class SignUpDialog extends StatelessWidget {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter PIN';
+                    } else if (value.length != 4) {
+                      return 'PIN Length must be 4';
                     }
                     return null;
                   },
@@ -135,6 +138,11 @@ class SignUpDialog extends StatelessWidget {
                           Get.dialog(OtpDialog());
                         } else {
                           print('Sign Up form is invalid!');
+                          PanaraInfoDialog.show(context,
+                              message: 'Please recheck your input',
+                              buttonText: 'Ok', onTapDismiss: () {
+                            Get.back();
+                          }, panaraDialogType: PanaraDialogType.warning);
                         }
                       },
                       title: 'Yes',
