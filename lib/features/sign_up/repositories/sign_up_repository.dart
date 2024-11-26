@@ -2,10 +2,10 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:chad_ai/utils/services/dio_service.dart';
 import '../../../shared/models/response_model.dart'; 
 
-class LoginRepository {
+class SignUpRepository {
   final dio = DioService().getDio();
 
-  Future<ResponseModel> login({
+  Future<ResponseModel> signUp({
     required String username,
     required String email,
     required String password,

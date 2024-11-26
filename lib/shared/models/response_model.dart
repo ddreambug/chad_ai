@@ -1,14 +1,14 @@
-class LoginResponseModel {
+class ResponseModel {
   final int? statusCode;
   final dynamic data;
 
-  LoginResponseModel({
+  ResponseModel({
     required this.statusCode,
     required this.data,
   });
 
-  factory LoginResponseModel.fromMap(Map<String, dynamic> map) {
-    return LoginResponseModel(
+  factory ResponseModel.fromMap(Map<String, dynamic> map) {
+    return ResponseModel(
       statusCode: map['status_code'] as int?,
       data: map['data'],
     );

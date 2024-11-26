@@ -19,7 +19,7 @@ class LoginInput extends StatelessWidget {
     return Form(
       key: formKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomTextField(
             iconifyIcon: MaterialSymbols.mail,
@@ -51,16 +51,30 @@ class LoginInput extends StatelessWidget {
           ),
           SizedBox(height: 10.h),
           Padding(
-            padding: EdgeInsets.only(right: 20.w),
+            padding: EdgeInsets.only(left: 5.w),
             child: GestureDetector(
               onTap: () {
-                print('Lupapassword');
+                Get.toNamed('/sign-up');
+                LoginController.to.pinLength.value = 0;
               },
-              child: Text(
-                'Forgot Password?',
-                style: CustomTextStyle.w600.copyWith(
-                  fontSize: 16.sp,
-                  color: MainColor.purple,
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Don’t have an account? ',
+                      style: CustomTextStyle.w500.copyWith(
+                        color: MainColor.textGrey,
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'Sign Up',
+                      style: CustomTextStyle.w600.copyWith(
+                        color: MainColor.textGrey,
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

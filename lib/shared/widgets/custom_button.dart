@@ -17,8 +17,8 @@ class CustomButton extends StatelessWidget {
   final void Function() onPress;
   final String platformIcon;
   final String title;
-  final int buttonHeight;
-  final int buttonWidth;
+  final double buttonHeight;
+  final double buttonWidth;
   final Color buttonColor;
 
   @override

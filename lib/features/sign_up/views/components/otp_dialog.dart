@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 import 'package:chad_ai/configs/themes/main_color.dart';
-import 'package:chad_ai/features/login/controllers/login_controller.dart';
+import 'package:chad_ai/features/sign_up/controllers/sign_up_controller.dart';
 
 class OtpDialog extends StatelessWidget {
   const OtpDialog({super.key});
@@ -51,26 +51,26 @@ class OtpDialog extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15.r),
                     ),
                   ),
-                  controller: LoginController.to.otpTextController,
+                  controller: SignUpController.to.otpTextController,
                   length: 4,
                   pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                   keyboardType: TextInputType.number,
                   validator: (value) {
-                    if (value != LoginController.to.otpValue.value) {
-                      LoginController.to.otpTextController.clear();
+                    if (value != SignUpController.to.otpValue.value) {
+                      SignUpController.to.otpTextController.clear();
                       return "Wrong OTP Code!";
                     }
                     return null;
                   },
                   onCompleted: (value) {
-                    LoginController.to.onOtpComplete(context, value);
+                    SignUpController.to.onOtpComplete(context, value);
                   },
                 ),
               ),
               SizedBox(height: 15.h),
               Obx(
                 () {
-                  var email = LoginController.to.emailValue.value;
+                  var email = SignUpController.to.emailValue.value;
                   return RichText(
                     text: TextSpan(
                       children: [
@@ -107,7 +107,7 @@ class OtpDialog extends StatelessWidget {
                   Spacer(),
                   CustomButton(
                     onPress: () {
-                      LoginController.to.sendEmailOtp();
+                      SignUpController.to.sendEmailOtp();
                     },
                     title: 'Resend',
                     buttonWidth: 142,

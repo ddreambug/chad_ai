@@ -13,6 +13,20 @@ class HiveService extends GetxService {
     });
   }
 
+  static Future<void> addUser({
+    required String nama,
+    required String email,
+    required String password,
+    required int pin,
+  }) async {
+    var box = Hive.box('chad_ai');
+
+    await box.put('username', nama);
+    await box.put('email', email);
+    await box.put('password', password);
+    await box.put('pin', pin);
+  }
+
   /// Kode untuk setting localstorage sesuai dengan repository
   // static Future<void> setAuth(Data serverSelected) async {
   //   await box.put("id", serverSelected.user!.id);
