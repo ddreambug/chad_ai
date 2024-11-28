@@ -2,6 +2,7 @@ import 'package:chad_ai/configs/themes/main_color.dart';
 import 'package:chad_ai/features/sign_up/controllers/sign_up_controller.dart';
 import 'package:chad_ai/features/sign_up/views/components/otp_dialog.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
+import 'package:chad_ai/shared/widgets/app_info.dart';
 import 'package:chad_ai/shared/widgets/custom_button.dart';
 import 'package:chad_ai/shared/widgets/custom_text_field.dart';
 import 'package:chad_ai/utils/enums/enum.dart';
@@ -157,7 +158,11 @@ class SignUpView extends StatelessWidget {
                 title: 'Sign Up',
                 buttonWidth: double.infinity,
                 buttonColor: MainColor.black,
-              )
+              ),
+              Spacer(),
+              Center(
+                child: AppInfo(),
+              ),
             ],
           ),
         ),

@@ -96,9 +96,7 @@ class SignUpController extends GetxController {
           );
 
           otpTextController.clear();
-          Get.back();
-          Get.back();
-          //   Get.until((route) => Get.currentRoute == '/login');
+          Get.until((route) => Get.currentRoute == '/login');
 
           Get.snackbar(
             "Success",

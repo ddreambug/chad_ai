@@ -3,9 +3,11 @@ import 'package:chad_ai/global_controllers/global_controller.dart';
 import 'package:chad_ai/utils/services/sentry_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:panara_dialogs/panara_dialogs.dart';
 
 class LoginController extends GetxController {
   static LoginController get to => Get.find();
@@ -32,10 +34,47 @@ class LoginController extends GetxController {
     Get.offNamed('chat');
   }
 
+  Future<void> signIn({
+    required String email,
+    required String password,
+    required BuildContext context,
+  }) async {
+    EasyLoading.show();
+    var userData = await LoginRepository().getUserData();
+    if (userData.statusCode == 200) {
+      final List users = userData.data;
+      final user = users.firstWhere(
+        (u) => u['email'] == email && u['password'] == password,
+        orElse: () => null,
+      );
+
+      if (user != null) {
+        EasyLoading.dismiss();
+        _navigateToChat();
+      } else {
+        EasyLoading.dismiss();
+        PanaraInfoDialog.show(
+          // ignore: use_build_context_synchronously
+          context,
+          message: 'No User Found',
+          buttonText: 'Ok',
+          onTapDismiss: () {
+            Get.back();
+          },
+          panaraDialogType: PanaraDialogType.error,
+        );
+        SentryService.handleAuthError('No User Found', StackTrace.current);
+      }
+    }
+  }
+
   /// Social Sign-In
   Future<dynamic> signInWithGoogle(BuildContext context) async {
     if (!await _checkInternetConnection()) {
-      print('Internet is not connected');
+      Get.showSnackbar(
+        GetSnackBar(title: 'No Internet'),
+      );
+      SentryService.handleAuthError('No Internet!', StackTrace.current);
       return;
     }
 

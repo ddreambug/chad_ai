@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:iconify_flutter/icons/majesticons.dart';
 import 'package:iconify_flutter/icons/material_symbols.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:panara_dialogs/panara_dialogs.dart';
 
 class LoginInput extends StatelessWidget {
   const LoginInput({super.key});
@@ -87,9 +88,22 @@ class LoginInput extends StatelessWidget {
               onPressed: () {
                 if (formKey.currentState?.validate() ?? false) {
                   print('Form is valid!');
-                  Get.offNamed('/chat');
+                  LoginController.to.signIn(
+                    email: LoginController.to.emailController.text,
+                    password: LoginController.to.passwordController.text,
+                    context: context,
+                  );
                 } else {
                   print('Form is invalid!');
+                  PanaraInfoDialog.show(
+                    context,
+                    message: 'Check Your Input',
+                    buttonText: 'ok',
+                    onTapDismiss: () {
+                      Get.back();
+                    },
+                    panaraDialogType: PanaraDialogType.warning,
+                  );
                 }
               },
               style: ButtonStyle(

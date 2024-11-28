@@ -1,6 +1,6 @@
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:chad_ai/utils/services/dio_service.dart';
-import '../../../shared/models/response_model.dart'; 
+import '../../../shared/models/response_model.dart';
 
 class LoginRepository {
   final dio = DioService().getDio();
@@ -23,6 +23,24 @@ class LoginRepository {
           "isGoogle": isGoogle,
         },
       );
+
+      return ResponseModel(
+        statusCode: response.statusCode,
+        data: response.data,
+      );
+    } catch (error, stackTrace) {
+      await Sentry.captureException(
+        error,
+        stackTrace: stackTrace,
+      );
+
+      rethrow;
+    }
+  }
+
+  Future<ResponseModel> getUserData() async {
+    try {
+      final response = await dio.get('/users');
 
       return ResponseModel(
         statusCode: response.statusCode,
