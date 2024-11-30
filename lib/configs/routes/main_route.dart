@@ -2,6 +2,7 @@ abstract class MainRoute {
   static const String login = '/login';
   static const String signUp = '/sign-up';
   static const String chat = '/chat';
+  static const String chatDetails = '/chat-details';
 
   static const String noConnection = '/no-connection';
 
