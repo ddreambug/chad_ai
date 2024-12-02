@@ -11,13 +11,21 @@ class ChatController extends GetxController {
   final TextEditingController textController = TextEditingController();
   final FocusNode textFieldFocus = FocusNode();
   var isLoading = false.obs;
+  final safetySetting = [
+    SafetySetting(HarmCategory.harassment, HarmBlockThreshold.none),
+    SafetySetting(HarmCategory.hateSpeech, HarmBlockThreshold.none),
+    SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.none),
+    SafetySetting(HarmCategory.dangerousContent, HarmBlockThreshold.none),
+  ];
 
   @override
   void onInit() {
     super.onInit();
     model = GenerativeModel(
-      model: 'gemini-pro',
+      model: 'gemini-1.5-flash',
       apiKey: 'AIzaSyCJ5l9efz2xqJF5W80HB47KTFZJPBfhfvc',
+      safetySettings: safetySetting,
+      generationConfig: GenerationConfig(temperature: 1.6),
     );
     chat.value = model.startChat();
   }
