@@ -1,5 +1,5 @@
 import 'package:chad_ai/configs/themes/main_color.dart';
-import 'package:chad_ai/features/chat/views/components/chat_widget.dart';
+import 'package:chad_ai/features/chat/sub_features/chat_detail/views/components/chat_detail_widget.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +11,7 @@ class ChatDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: MainColor.primary,
+        backgroundColor: const Color.fromARGB(29, 255, 145, 35),
         title: Text(
           'Chat Details',
           style: CustomTextStyle.w500.copyWith(fontSize: 22.sp),
@@ -28,7 +28,7 @@ class ChatDetailView extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(color: MainColor.primary),
         child: Center(
-          child: ChatWidget(),
+          child: ChatDetailWidget(),
         ),
       ),
     );

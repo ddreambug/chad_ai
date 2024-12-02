@@ -1,9 +1,10 @@
+import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
-class ChatController extends GetxController {
-  static ChatController get to => Get.find();
+class ChatDetailController extends GetxController {
+  static ChatDetailController get to => Get.find();
 
   late final GenerativeModel model;
   var chat = Rx<ChatSession?>(null);
@@ -17,6 +18,7 @@ class ChatController extends GetxController {
     SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.none),
     SafetySetting(HarmCategory.dangerousContent, HarmBlockThreshold.none),
   ];
+  var savedChat = Rx<ChatSession?>(null);
 
   @override
   void onInit() {
@@ -28,6 +30,34 @@ class ChatController extends GetxController {
       generationConfig: GenerationConfig(temperature: 1.6),
     );
     chat.value = model.startChat();
+  }
+
+  void resetModel() {
+    savedChat.value = chat.value;
+    chat.value = null;
+
+    model = GenerativeModel(
+      model: 'gemini-1.5-flash',
+      apiKey: 'AIzaSyCJ5l9efz2xqJF5W80HB47KTFZJPBfhfvc',
+      safetySettings: safetySetting,
+      generationConfig: GenerationConfig(temperature: 1.6),
+    );
+
+    chat.value = model.startChat();
+  }
+
+  String extractMessageText(int chatOrder, ChatDataType targetType) {
+    var chatHistory = chat.value?.history.toList() ?? [];
+
+    if (targetType == ChatDataType.role) {
+      return chatHistory[chatOrder].role!;
+    } else {
+      return chatHistory[chatOrder]
+          .parts
+          .whereType<TextPart>()
+          .map<String>((e) => e.text)
+          .join('');
+    }
   }
 
   void scrollDown() {
@@ -68,6 +98,14 @@ class ChatController extends GetxController {
       isLoading.value = false;
       chat.refresh();
       print('current chat length: ${chat.value!.history.toList().length}');
+
+      print(
+        'first chat: ${extractMessageText(0, ChatDataType.text)}',
+      );
+
+      print(
+        'role: ${extractMessageText(0, ChatDataType.role)}',
+      );
     }
   }
 

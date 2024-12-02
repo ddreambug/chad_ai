@@ -1,20 +1,20 @@
-import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
+import 'package:chad_ai/features/chat/sub_features/chat_detail/controllers/chat_detail_controller.dart';
+import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/cil.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:chad_ai/configs/themes/main_color.dart';
-import 'package:chad_ai/features/chat/views/components/chat_item.dart';
+import 'package:chad_ai/features/chat/sub_features/chat_detail/views/components/chat_detail_item.dart';
 
-class ChatWidget extends StatelessWidget {
-  const ChatWidget({super.key});
+class ChatDetailWidget extends StatelessWidget {
+  const ChatDetailWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var controller = ChatController.to;
+    var controller = ChatDetailController.to;
 
     return Padding(
       padding: const EdgeInsets.all(5.0),
@@ -24,31 +24,34 @@ class ChatWidget extends StatelessWidget {
         children: [
           // ListView to display chat history
           Expanded(
-            child: Obx(() {
-              final history =
-                  ChatController.to.chat.value?.history.toList() ?? [];
-                  
-              return ListView.builder(
-                controller: controller.scrollController,
-                itemBuilder: (context, idx) {
-                  final content = history[idx];
-                  final text = content.parts
-                      .whereType<TextPart>()
-                      .map<String>((e) => e.text)
-                      .join('');
-                  return GestureDetector(
-                    onTap: () {
-                      controller.textFieldFocus.unfocus();
-                    },
-                    child: ChatItem(
-                      text: text,
-                      isFromUser: content.role == 'user',
-                    ),
-                  );
-                },
-                itemCount: controller.chat.value!.history.length,
-              );
-            }),
+            child: Obx(
+              () {
+                return ListView.builder(
+                  controller: controller.scrollController,
+                  itemCount: controller.chat.value!.history.length,
+                  itemBuilder: (context, idx) {
+                    final text = ChatDetailController.to.extractMessageText(
+                      idx,
+                      ChatDataType.text,
+                    );
+                    final role = ChatDetailController.to.extractMessageText(
+                      idx,
+                      ChatDataType.role,
+                    );
+
+                    return GestureDetector(
+                      onTap: () {
+                        controller.textFieldFocus.unfocus();
+                      },
+                      child: ChatDetailItem(
+                        text: text,
+                        isFromUser: role == 'user',
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           ),
 
           // Input and Send Button Row
@@ -95,17 +98,18 @@ class ChatWidget extends StatelessWidget {
 
                 SizedBox(width: 10.w),
 
-                // Send Button or Loading Indicator
+                // Send Button
                 Obx(() {
                   return SizedBox(
                     height: 50.w,
                     width: 50.w,
                     child: controller.isLoading.value
-                        ? const CircularProgressIndicator()
+                        ? const CircularProgressIndicator(strokeWidth: 3)
                         : IconButton(
                             onPressed: () {
                               controller.sendChatMessage(
-                                  controller.textController.text);
+                                controller.textController.text,
+                              );
                             },
                             icon: Iconify(
                               Cil.send,
@@ -113,8 +117,9 @@ class ChatWidget extends StatelessWidget {
                               size: 24.sp,
                             ),
                             style: ButtonStyle(
-                              backgroundColor:
-                                  WidgetStatePropertyAll(MainColor.purple),
+                              backgroundColor: WidgetStatePropertyAll(
+                                MainColor.purple,
+                              ),
                             ),
                           ),
                   );

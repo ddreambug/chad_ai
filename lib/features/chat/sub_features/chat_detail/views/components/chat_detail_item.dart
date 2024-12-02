@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ChatItem extends StatelessWidget {
-  const ChatItem({
+class ChatDetailItem extends StatelessWidget {
+  const ChatDetailItem({
     super.key,
     required this.text,
     required this.isFromUser,
@@ -47,17 +47,21 @@ class ChatItem extends StatelessWidget {
               left: 10,
               right: 10,
             ).w,
-            child: MarkdownBody(
-              data: text,
-              styleSheet: MarkdownStyleSheet.fromTheme(
-                ThemeData(
-                  textTheme: TextTheme(
-                    bodyMedium: CustomTextStyle.w400.copyWith(
-                      fontSize: 16.sp,
+            child: Column(
+              children: [
+                MarkdownBody(
+                  data: text,
+                  styleSheet: MarkdownStyleSheet.fromTheme(
+                    ThemeData(
+                      textTheme: TextTheme(
+                        bodyMedium: CustomTextStyle.w400.copyWith(
+                          fontSize: 16.sp,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         ),

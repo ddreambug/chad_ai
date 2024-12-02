@@ -8,3 +8,8 @@ enum ObscureType {
   rePassword,
   pin,
 }
+
+enum ChatDataType {
+  text,
+  role,
+}
