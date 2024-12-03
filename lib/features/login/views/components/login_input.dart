@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chad_ai/configs/themes/main_color.dart';
 import 'package:chad_ai/features/login/controllers/login_controller.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
@@ -87,14 +89,15 @@ class LoginInput extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 if (formKey.currentState?.validate() ?? false) {
-                  print('Form is valid!');
+                  log('Form is valid!');
+                  
                   LoginController.to.signIn(
                     email: LoginController.to.emailController.text,
                     password: LoginController.to.passwordController.text,
                     context: context,
                   );
                 } else {
-                  print('Form is invalid!');
+                  log('Form is invalid!');
                   PanaraInfoDialog.show(
                     context,
                     message: 'Check Your Input',

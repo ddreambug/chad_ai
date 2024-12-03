@@ -11,7 +11,7 @@ class ChatDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(29, 255, 145, 35),
+        backgroundColor: const Color.fromARGB(35, 255, 145, 35),
         title: Text(
           'Chat Details',
           style: CustomTextStyle.w500.copyWith(fontSize: 22.sp),

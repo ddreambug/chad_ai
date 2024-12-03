@@ -1,4 +1,6 @@
+import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
 import 'package:chad_ai/utils/enums/enum.dart';
+import 'package:chad_ai/utils/services/utility_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -6,6 +8,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 class ChatDetailController extends GetxController {
   static ChatDetailController get to => Get.find();
 
+  final ChatSession? arguments = Get.arguments;
   late final GenerativeModel model;
   var chat = Rx<ChatSession?>(null);
   final ScrollController scrollController = ScrollController();
@@ -30,34 +33,45 @@ class ChatDetailController extends GetxController {
       generationConfig: GenerationConfig(temperature: 1.6),
     );
     chat.value = model.startChat();
+
+    if (arguments != null) {
+      chat.value = arguments;
+    }
   }
 
-  void resetModel() {
-    savedChat.value = chat.value;
-    chat.value = null;
+  @override
+  void onClose() {
+    super.onClose();
+    if (chat.value != null && chat.value!.history.length >= 2) {
+      if (!compareChatData()) {
+        ChatController.to.chatList.value.add(
+          {
+            'id': DateTime.now().millisecondsSinceEpoch,
+            'time': DateTime.now(),
+            'data': chat.value!,
+          },
+        );
+        ChatController.to.chatList.refresh();
+      }
+    }
+  }
 
-    model = GenerativeModel(
-      model: 'gemini-1.5-flash',
-      apiKey: 'AIzaSyCJ5l9efz2xqJF5W80HB47KTFZJPBfhfvc',
-      safetySettings: safetySetting,
-      generationConfig: GenerationConfig(temperature: 1.6),
+  // To decide if we need to save chat or not
+  bool compareChatData() {
+    if (chat.value == null) return false;
+    var chatText = UtilityService.extractMessageText(
+      chat.value!,
+      0,
+      ChatDataType.text,
     );
 
-    chat.value = model.startChat();
-  }
-
-  String extractMessageText(int chatOrder, ChatDataType targetType) {
-    var chatHistory = chat.value?.history.toList() ?? [];
-
-    if (targetType == ChatDataType.role) {
-      return chatHistory[chatOrder].role!;
-    } else {
-      return chatHistory[chatOrder]
-          .parts
-          .whereType<TextPart>()
-          .map<String>((e) => e.text)
-          .join('');
-    }
+    return ChatController.to.chatList.value.any(
+      (chatMap) {
+        return UtilityService.extractMessageText(
+                chatMap['data'] as ChatSession, 0, ChatDataType.text) ==
+            chatText;
+      },
+    );
   }
 
   void scrollDown() {
@@ -97,15 +111,6 @@ class ChatDetailController extends GetxController {
       textFieldFocus.unfocus();
       isLoading.value = false;
       chat.refresh();
-      print('current chat length: ${chat.value!.history.toList().length}');
-
-      print(
-        'first chat: ${extractMessageText(0, ChatDataType.text)}',
-      );
-
-      print(
-        'role: ${extractMessageText(0, ChatDataType.role)}',
-      );
     }
   }
 

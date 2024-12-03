@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chad_ai/configs/themes/main_color.dart';
 import 'package:chad_ai/features/login/controllers/login_controller.dart';
 import 'package:chad_ai/features/sign_up/repositories/sign_up_repository.dart';
@@ -47,7 +49,7 @@ class SignUpController extends GetxController {
     } else if (type == DialogType.otp) {
       Get.dialog(OtpDialog());
     } else {
-      print('wrong type');
+      log('wrong type');
     }
   }
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chad_ai/constants/cores/assets/image_constant.dart';
 import 'package:chad_ai/features/login/controllers/login_controller.dart';
 import 'package:chad_ai/shared/widgets/custom_button.dart';
@@ -15,7 +17,7 @@ class SocialLoginButton extends StatelessWidget {
         CustomButton(
           onPress: () async {
             var login = await LoginController.to.signInWithGoogle(context);
-            print('google button triggered $login');
+            log('google button triggered $login');
           },
           platformIcon: ImageConstant.icGoogle,
           title: 'Google',
@@ -24,7 +26,7 @@ class SocialLoginButton extends StatelessWidget {
         CustomButton(
           onPress: () async {
             var login = await LoginController.to.signInWithFacebook(context);
-            print('google button triggered $login');
+            log('google button triggered $login');
           },
           platformIcon: ImageConstant.icFacebook,
           title: 'Facebook',

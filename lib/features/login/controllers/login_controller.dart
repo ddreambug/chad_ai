@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chad_ai/features/login/repositories/login_repository.dart';
 import 'package:chad_ai/global_controllers/global_controller.dart';
 import 'package:chad_ai/utils/services/sentry_service.dart';
@@ -108,7 +110,7 @@ class LoginController extends GetxController {
 
   Future<dynamic> signInWithFacebook(BuildContext context) async {
     if (!await _checkInternetConnection()) {
-      print('Internet is not connected');
+      log('Internet is not connected');
       return;
     }
 
@@ -126,7 +128,7 @@ class LoginController extends GetxController {
 
         await _navigateToChat();
       } else {
-        print('Facebook Login Failed: ${facebookUser.message}');
+        log('Facebook Login Failed: ${facebookUser.message}');
       }
     } catch (e, stacktrace) {
       await SentryService.handleAuthError(e, stacktrace);

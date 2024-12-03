@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chad_ai/configs/themes/main_color.dart';
 import 'package:chad_ai/features/sign_up/controllers/sign_up_controller.dart';
 import 'package:chad_ai/features/sign_up/views/components/otp_dialog.dart';
@@ -142,12 +144,12 @@ class SignUpView extends StatelessWidget {
               CustomButton(
                 onPress: () async {
                   if (formKey.currentState?.validate() ?? false) {
-                    print('Sign Up form is valid!');
+                    log('Sign Up form is valid!');
                     await SignUpController.to.sendEmailOtp();
 
                     Get.dialog(OtpDialog());
                   } else {
-                    print('Sign Up form is invalid!');
+                    log('Sign Up form is invalid!');
                     PanaraInfoDialog.show(context,
                         message: 'Please recheck your input',
                         buttonText: 'Ok', onTapDismiss: () {

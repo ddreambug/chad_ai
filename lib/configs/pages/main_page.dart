@@ -1,4 +1,5 @@
 import 'package:chad_ai/configs/routes/main_route.dart';
+import 'package:chad_ai/features/chat/bindings/chat_bindings.dart';
 import 'package:chad_ai/features/chat/sub_features/chat_detail/bindings/chat_detail_binding.dart';
 import 'package:chad_ai/features/chat/sub_features/chat_detail/views/ui/chat_detail_view.dart';
 import 'package:chad_ai/features/chat/views/ui/chat_view.dart';
@@ -34,6 +35,7 @@ abstract class MainPage {
     GetPage(
       name: MainRoute.chat,
       page: () => const ChatView(),
+      binding: ChatBindings(),
     ),
     GetPage(
       name: MainRoute.chatDetails,
