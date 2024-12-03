@@ -3,6 +3,7 @@ import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
 import 'package:chad_ai/features/chat/views/components/add_chat_button.dart';
 import 'package:chad_ai/features/chat/views/components/chat_card.dart';
 import 'package:chad_ai/features/chat/views/components/custom_appbar.dart';
+import 'package:chad_ai/features/chat/views/components/custom_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +15,7 @@ class ChatView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppbar(),
+        floatingActionButton: CustomFab(),
         body: Container(
           decoration: BoxDecoration(color: MainColor.primary),
           child: Obx(
