@@ -1,9 +1,11 @@
+import 'package:chad_ai/shared/widgets/bottomsheet_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:chad_ai/utils/services/utility_service.dart';
+import 'package:get/get.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
 import 'package:intl/intl.dart';
@@ -54,10 +56,18 @@ class ChatCard extends StatelessWidget {
               ),
             ),
             GestureDetector(
-                onTap: () {
-                  print('card menu dots tapped');
-                },
-                child: Iconify(Carbon.overflow_menu_vertical)),
+              onTap: () {
+                Get.bottomSheet(
+                  BottomsheetType.allChat(
+                    onArchive: () {},
+                    onDelete: () {
+                      ChatController.to.deleteChat(idx);
+                    },
+                  ),
+                );
+              },
+              child: Iconify(Carbon.overflow_menu_vertical),
+            ),
           ],
         ),
       ),

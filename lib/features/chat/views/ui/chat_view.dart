@@ -4,6 +4,7 @@ import 'package:chad_ai/features/chat/views/components/add_chat_button.dart';
 import 'package:chad_ai/features/chat/views/components/chat_card.dart';
 import 'package:chad_ai/features/chat/views/components/custom_appbar.dart';
 import 'package:chad_ai/features/chat/views/components/custom_fab.dart';
+import 'package:chad_ai/features/chat/views/components/custom_sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +15,12 @@ class ChatView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppbar(),
+        key: ChatController.to.scaffoldKey,
+        appBar: CustomAppbar(
+          title: 'All Chat',
+          useLeading: true,
+        ),
+        drawer: CustomSidebar(),
         floatingActionButton: CustomFab(),
         body: Container(
           decoration: BoxDecoration(color: MainColor.primary),
@@ -34,10 +40,12 @@ class ChatView extends StatelessWidget {
                     // Create chat card
                     return GestureDetector(
                       onTap: () {
-                        print('card tapped');
                         Get.toNamed(
                           '/chat-details',
-                          arguments: data[idx]['data'],
+                          arguments: {
+                            'index': idx,
+                            'data': data[idx]['data'],
+                          },
                         );
                       },
                       child: ChatCard(idx: idx),

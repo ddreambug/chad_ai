@@ -8,7 +8,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 class ChatDetailController extends GetxController {
   static ChatDetailController get to => Get.find();
 
-  final ChatSession? arguments = Get.arguments;
+  final arguments = Get.arguments;
   late final GenerativeModel model;
   var chat = Rx<ChatSession?>(null);
   final ScrollController scrollController = ScrollController();
@@ -22,6 +22,7 @@ class ChatDetailController extends GetxController {
     SafetySetting(HarmCategory.dangerousContent, HarmBlockThreshold.none),
   ];
   var savedChat = Rx<ChatSession?>(null);
+  bool save = true;
 
   @override
   void onInit() {
@@ -35,14 +36,14 @@ class ChatDetailController extends GetxController {
     chat.value = model.startChat();
 
     if (arguments != null) {
-      chat.value = arguments;
+      chat.value = arguments['data'];
     }
   }
 
   @override
   void onClose() {
     super.onClose();
-    if (chat.value != null && chat.value!.history.length >= 2) {
+    if (chat.value != null && chat.value!.history.length >= 2 && save) {
       if (!compareChatData()) {
         ChatController.to.chatList.value.add(
           {
@@ -54,6 +55,35 @@ class ChatDetailController extends GetxController {
         ChatController.to.chatList.refresh();
       }
     }
+  }
+
+  void deleteChat() {
+    if (arguments != null) {
+      int index = arguments['index'];
+      var chatList = ChatController.to.chatList;
+
+      if (index >= 0 && index < chatList.value.length) {
+        chatList.value.removeAt(index);
+        chatList.refresh();
+        backToAllChat();
+      }
+    } else {
+      backToAllChat();
+    }
+  }
+
+  void backToAllChat() {
+    save = false;
+    Get.back();
+    Get.back();
+    Get.showSnackbar(
+      GetSnackBar(
+        title: 'Chat Deleted',
+        message: 'Chat Succesfully Deleted',
+        duration: Duration(seconds: 1),
+        snackPosition: SnackPosition.TOP,
+      ),
+    );
   }
 
   // To decide if we need to save chat or not

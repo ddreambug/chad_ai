@@ -92,7 +92,7 @@ class LoginController extends GetxController {
         idToken: googleAuth.idToken,
       );
 
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      FirebaseAuth.instance.signInWithCredential(credential);
 
       await LoginRepository().login(
         username: googleUser.displayName!,
