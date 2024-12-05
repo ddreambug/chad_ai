@@ -46,6 +46,7 @@ class ChatDetailController extends GetxController {
     super.onClose();
     if (chat.value != null && chat.value!.history.length >= 2 && save) {
       if (!compareChatData()) {
+        ChatController.to.viewType.value = ViewType.allChat;
         var id = DateTime.now().millisecondsSinceEpoch;
         var time = DateTime.now();
 

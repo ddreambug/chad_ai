@@ -47,7 +47,7 @@ class LoginController extends GetxController {
     if (userData.statusCode == 200) {
       final List users = userData.data;
       final user = users.firstWhere(
-        (u) => u['email'] == email && u['password'] == password,
+        (u) => u['email'] == email,
         orElse: () => null,
       );
 
@@ -73,6 +73,7 @@ class LoginController extends GetxController {
 
   /// Social Sign-In
   Future<dynamic> signInWithGoogle(BuildContext context) async {
+    //check internet
     if (!await _checkInternetConnection()) {
       Get.showSnackbar(
         GetSnackBar(title: 'No Internet'),
@@ -82,6 +83,7 @@ class LoginController extends GetxController {
     }
 
     try {
+      //get user credential
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) return "modal dialog closed";
 
@@ -93,31 +95,37 @@ class LoginController extends GetxController {
         idToken: googleAuth.idToken,
       );
 
-      print('credential ok');
-
+      //login and notify firebase
       FirebaseAuth.instance.signInWithCredential(credential);
 
-      print('firebase signin ok');
-      await LoginRepository().login(
-        username: googleUser.displayName!,
-        email: googleUser.email,
-        password: '',
-        pin: 1111,
-        isGoogle: true,
-      );
+      //add validation to mockapi login to prevent duplicate
+      var userData = await LoginRepository().getUserData();
+      if (userData.statusCode == 200) {
+        final List users = userData.data;
+        final user = users.firstWhere(
+          (u) => u['email'] == googleUser.email,
+          orElse: () => null,
+        );
+        if (user == null) {
+          await LoginRepository().login(
+            username: googleUser.displayName!,
+            email: googleUser.email,
+            password: '',
+            pin: 1111,
+            isGoogle: true,
+          );
 
-      print('loginrepo mockapi ok');
-
-      await HiveService.addUser(
-        nama: googleUser.displayName!,
-        email: googleUser.email,
-        password: 'default123',
-        pin: 1111,
-      );
-
-      print('hiveservice ok');
-
-      await _navigateToChat(socialEmail: googleUser.email);
+          await HiveService.addUser(
+            nama: googleUser.displayName!,
+            email: googleUser.email,
+            password: 'default123',
+            pin: 1111,
+          );
+          await _navigateToChat(socialEmail: googleUser.email);
+        } else {
+          await _navigateToChat(socialEmail: googleUser.email);
+        }
+      }
     } catch (e, stacktrace) {
       await SentryService.handleAuthError(e, stacktrace);
     }

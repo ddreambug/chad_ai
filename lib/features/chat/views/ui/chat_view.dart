@@ -1,13 +1,14 @@
 import 'package:chad_ai/configs/themes/main_color.dart';
 import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
-import 'package:chad_ai/features/chat/views/components/add_chat_button.dart';
-import 'package:chad_ai/features/chat/views/components/chat_card.dart';
+import 'package:chad_ai/features/chat/views/components/all_chat.dart';
+import 'package:chad_ai/features/chat/views/components/archived_chat.dart';
 import 'package:chad_ai/features/chat/views/components/custom_appbar.dart';
 import 'package:chad_ai/features/chat/views/components/custom_fab.dart';
 import 'package:chad_ai/features/chat/views/components/custom_sidebar.dart';
+import 'package:chad_ai/features/chat/views/components/profile_details.dart';
+import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatView extends StatelessWidget {
   const ChatView({super.key});
@@ -17,46 +18,26 @@ class ChatView extends StatelessWidget {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
-        key: scaffoldKey,
-        appBar: CustomAppbar(
-          title: 'All Chat',
-          useLeading: false,
-        ),
-        drawer: CustomSidebar(),
-        floatingActionButton: CustomFab(),
-        body: Container(
-          decoration: BoxDecoration(color: MainColor.primary),
-          child: Obx(
-            () {
-              var data = ChatController.to.chatList.value;
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15).w,
-                child: ListView.builder(
-                  itemCount: data.length + 1,
-                  itemBuilder: (context, idx) {
-                    // Create add chat button
-                    if (idx == data.length) {
-                      return AddChatButton();
-                    }
+      key: scaffoldKey,
+      appBar: CustomAppbar(),
+      drawer: CustomSidebar(),
+      floatingActionButton: CustomFab(),
+      body: Container(
+        decoration: BoxDecoration(color: MainColor.primary),
+        child: Obx(
+          () {
+            var viewType = ChatController.to.viewType.value;
 
-                    // Create chat card
-                    return GestureDetector(
-                      onTap: () {
-                        Get.toNamed(
-                          '/chat-details',
-                          arguments: {
-                            'index': idx,
-                            'data': data[idx]['data'],
-                          },
-                        );
-                      },
-                      child: ChatCard(idx: idx),
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-        ));
+            if (viewType == ViewType.allChat) {
+              return AllChat();
+            } else if (viewType == ViewType.archivedChat) {
+              return ArchivedChat();
+            } else {
+              return ProfileDetails();
+            }
+          },
+        ),
+      ),
+    );
   }
 }

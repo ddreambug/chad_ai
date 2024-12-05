@@ -82,30 +82,46 @@ class SignUpController extends GetxController {
   void onOtpComplete(BuildContext context, String value) async {
     if (value == EmailOTP.getOTP()) {
       try {
-        var response = await SignUpRepository().signUp(
-          username: usernameController.text,
-          email: emailController.text,
-          password: passwordController.text,
-          pin: int.parse(pinController.text),
-        );
-
-        if (response.statusCode == 201) {
-          HiveService.addUser(
-            nama: usernameController.text,
-            email: emailController.text,
-            password: passwordController.text,
-            pin: int.parse(pinController.text),
+        var userData = await SignUpRepository().getUserData();
+        if (userData.statusCode == 200) {
+          final List users = userData.data;
+          final user = users.firstWhere(
+            (u) =>
+                u['email'] == emailController.text &&
+                u['password'] == passwordController.text,
+            orElse: () => null,
           );
 
-          otpTextController.clear();
-          Get.until((route) => Get.currentRoute == '/login');
+          if (user == null) {
+            var response = await SignUpRepository().signUp(
+              username: usernameController.text,
+              email: emailController.text,
+              password: passwordController.text,
+              pin: int.parse(pinController.text),
+            );
 
-          Get.snackbar(
-            "Success",
-            "Registration Success",
-            backgroundColor: MainColor.black,
-            duration: const Duration(seconds: 2),
-          );
+            if (response.statusCode == 201) {
+              HiveService.addUser(
+                nama: usernameController.text,
+                email: emailController.text,
+                password: passwordController.text,
+                pin: int.parse(pinController.text),
+              );
+
+              otpTextController.clear();
+              Get.until((route) => Get.currentRoute == '/login');
+
+              Get.snackbar(
+                "Success",
+                "Registration Success",
+                backgroundColor: MainColor.black,
+                duration: const Duration(seconds: 2),
+              );
+            }
+          } else {
+            otpTextController.clear();
+            Get.until((route) => Get.currentRoute == '/login');
+          }
         }
       } catch (e, stacktrace) {
         SentryService.handleAuthError(e, stacktrace);

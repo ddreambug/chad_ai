@@ -13,3 +13,9 @@ enum ChatDataType {
   text,
   role,
 }
+
+enum ViewType {
+  allChat,
+  archivedChat,
+  profile,
+}

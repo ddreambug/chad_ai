@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:chad_ai/configs/themes/main_color.dart';
+import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
 import 'package:iconify_flutter/icons/charm.dart';
@@ -12,7 +16,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.useLeading = false,
     this.useAction = false,
     this.onTap = _defaultOnTap,
-    required this.title,
+    this.title = '',
   });
 
   final String title;
@@ -21,17 +25,27 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onTap;
 
   static void _defaultOnTap() {
-    print("Default onTap triggered");
+    log("Default onTap triggered");
   }
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: MainColor.primary,
-      title: Text(
-        title,
-        style: CustomTextStyle.w500.copyWith(fontSize: 22.sp),
-      ),
+      title: title != ''
+          ? Text(
+              title,
+              style: CustomTextStyle.w500.copyWith(fontSize: 22.sp),
+            )
+          : Obx(
+              () {
+                var customTitle = ChatController.to.appbarTitle.value;
+                return Text(
+                  customTitle,
+                  style: CustomTextStyle.w500.copyWith(fontSize: 22.sp),
+                );
+              },
+            ),
       centerTitle: true,
       leading: useLeading
           ? GestureDetector(

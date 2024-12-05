@@ -1,6 +1,8 @@
 import 'package:chad_ai/configs/themes/main_color.dart';
+import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
 import 'package:chad_ai/features/chat/views/components/sidebar_content.dart';
 import 'package:chad_ai/shared/widgets/app_info.dart';
+import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -46,18 +48,28 @@ class CustomSidebar extends StatelessWidget {
               leadingIcon: Carbon.list,
               title: 'All Chat',
               onTap: () {
-                Get.toNamed('/chat');
+                ChatController.to.viewType.value = ViewType.allChat;
+                ChatController.to.appbarTitle.value = 'All Chat';
+                Get.back();
               },
             ),
             SidebarContent(
               leadingIcon: Carbon.archive,
               title: 'Achived Chat',
-              onTap: () {},
+              onTap: () {
+                ChatController.to.viewType.value = ViewType.archivedChat;
+                ChatController.to.appbarTitle.value = 'Archived Chat';
+                Get.back();
+              },
             ),
             SidebarContent(
               leadingIcon: Carbon.user,
               title: 'Profile',
-              onTap: () {},
+              onTap: () {
+                ChatController.to.viewType.value = ViewType.profile;
+                ChatController.to.appbarTitle.value = 'Profile & Settings';
+                Get.back();
+              },
             ),
             SidebarContent(
               leadingIcon: Carbon.logout,

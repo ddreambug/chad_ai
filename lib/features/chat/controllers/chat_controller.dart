@@ -1,3 +1,4 @@
+import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:chad_ai/utils/services/hive_service.dart';
 import 'package:get/get.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -18,13 +19,12 @@ class ChatController extends GetxController {
     getChats();
   }
 
+  //Get
   void getChats() {
     var chats = HiveService.getChats(email: currentEmail);
+
     chatList.value = List<Map<String, dynamic>>.from(chats);
     chatList.refresh();
-
-    // Print the actual values for debugging
-    print('chatList: ${chatList.value}');
   }
 
   //Delete
@@ -45,9 +45,9 @@ class ChatController extends GetxController {
     );
   }
 
-  //sidebar
-  var selectedIndex = 0.obs;
-  void selectPage(int index) {
-    selectedIndex.value = index;
-  }
+  //Sidebar
+  Rx<ViewType> viewType = ViewType.allChat.obs;
+
+  //Appbar
+  RxString appbarTitle = 'All Chat'.obs;
 }
