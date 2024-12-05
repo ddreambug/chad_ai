@@ -28,7 +28,7 @@ class ChatView extends StatelessWidget {
           decoration: BoxDecoration(color: MainColor.primary),
           child: Obx(
             () {
-              var data = ChatController.to.hiveChat.value;
+              var data = ChatController.to.chatList.value;
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15).w,
                 child: ListView.builder(

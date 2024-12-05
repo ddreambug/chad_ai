@@ -7,7 +7,6 @@ class ChatController extends GetxController {
 
   late final GenerativeModel model;
   var chatList = Rx<List<Map<String, dynamic>>>([]);
-  var hiveChat = Rx<List<Map<String, dynamic>>>([]);
 
   late final String currentEmail;
 
@@ -21,31 +20,29 @@ class ChatController extends GetxController {
 
   void getChats() {
     var chats = HiveService.getChats(email: currentEmail);
-    hiveChat.value = List<Map<String, dynamic>>.from(chats);
-    hiveChat.refresh();
+    chatList.value = List<Map<String, dynamic>>.from(chats);
+    chatList.refresh();
 
     // Print the actual values for debugging
-    print('hiveChat: ${hiveChat.value}');
-    print('chatList: $chatList');
+    print('chatList: ${chatList.value}');
   }
 
   //Delete
   void deleteChat(int index) {
-    if (index >= 0 && index < hiveChat.value.length) {
-      hiveChat.value.removeAt(index);
-      hiveChat.refresh();
-
-      print('current email: $currentEmail');
-      Get.back();
-      Get.showSnackbar(
-        GetSnackBar(
-          title: 'Chat Deleted',
-          message: 'Chat Succesfully Deleted',
-          duration: Duration(seconds: 1),
-          snackPosition: SnackPosition.TOP,
-        ),
-      );
-    }
+    HiveService.deleteChat(
+      email: ChatController.to.currentEmail,
+      chatIndex: index,
+    );
+    ChatController.to.getChats();
+    Get.back();
+    Get.showSnackbar(
+      GetSnackBar(
+        title: 'Chat Deleted',
+        message: 'Chat Succesfully Deleted',
+        duration: Duration(seconds: 1),
+        snackPosition: SnackPosition.TOP,
+      ),
+    );
   }
 
   //sidebar

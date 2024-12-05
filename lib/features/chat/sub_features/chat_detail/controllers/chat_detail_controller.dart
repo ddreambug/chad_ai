@@ -48,13 +48,7 @@ class ChatDetailController extends GetxController {
       if (!compareChatData()) {
         var id = DateTime.now().millisecondsSinceEpoch;
         var time = DateTime.now();
-        // ChatController.to.chatList.value.add(
-        //   {
-        //     'id': id,
-        //     'time': time,
-        //     'data': chat.value!,
-        //   },
-        // );
+
         HiveService.saveChat(
           email: ChatController.to.currentEmail,
           id: id,
@@ -70,13 +64,12 @@ class ChatDetailController extends GetxController {
   void deleteChat() {
     if (arguments != null) {
       int index = arguments['index'];
-      var chatList = ChatController.to.hiveChat;
-
-      if (index >= 0 && index < chatList.value.length) {
-        chatList.value.removeAt(index);
-        chatList.refresh();
-        backToAllChat();
-      }
+      HiveService.deleteChat(
+        email: ChatController.to.currentEmail,
+        chatIndex: index,
+      );
+      ChatController.to.getChats();
+      backToAllChat();
     } else {
       backToAllChat();
     }
@@ -105,7 +98,7 @@ class ChatDetailController extends GetxController {
       ChatDataType.text,
     );
 
-    return ChatController.to.hiveChat.value.any(
+    return ChatController.to.chatList.value.any(
       (chatMap) {
         return UtilityService.extractMessageText(
                 chatMap['data'] as ChatSession, 0, ChatDataType.text) ==

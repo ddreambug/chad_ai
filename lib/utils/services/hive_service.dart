@@ -16,11 +16,8 @@ class HiveService extends GetxService {
     required int pin,
   }) async {
     var box = Hive.box('chad_ai');
-
-    // Get existing data
     var existingData = box.get(email) ?? {};
 
-    // Merge new data with existing data
     var updatedData = {
       'username': nama,
       'password': password,
@@ -70,6 +67,29 @@ class HiveService extends GetxService {
 
     if (userData != null) {
       return userData['chats'] ?? [];
+    } else {
+      throw Exception('User not found');
+    }
+  }
+
+  static Future<void> deleteChat({
+    required String email,
+    required int chatIndex, 
+  }) async {
+    var box = Hive.box('chad_ai');
+    var userData = box.get(email);
+
+    if (userData != null) {
+      List<dynamic> chats = userData['chats'] ?? [];
+
+      if (chatIndex >= 0 && chatIndex < chats.length) {
+        chats.removeAt(chatIndex);
+
+        userData['chats'] = chats;
+        await box.put(email, userData);
+      } else {
+        throw Exception('Invalid chat index');
+      }
     } else {
       throw Exception('User not found');
     }
