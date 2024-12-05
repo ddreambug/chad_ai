@@ -1,7 +1,9 @@
 import 'package:chad_ai/configs/themes/main_color.dart';
+import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,6 +19,9 @@ class AddChatButton extends StatelessWidget {
         child: TextButton.icon(
           onPressed: () {
             Get.toNamed("/chat-details");
+            ChatController.to.getChats();
+            var box = Hive.box('chad_ai');
+            print(box.toMap());
           },
           label: Text(
             'Add New Chat',

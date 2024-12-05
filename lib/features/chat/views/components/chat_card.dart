@@ -36,7 +36,7 @@ class ChatCard extends StatelessWidget {
               width: 230.w,
               child: Text(
                 UtilityService.extractMessageText(
-                  ChatController.to.chatList.value[idx]['data'],
+                  ChatController.to.hiveChat.value[idx]['data'],
                   0,
                   ChatDataType.text,
                 ),
@@ -49,7 +49,7 @@ class ChatCard extends StatelessWidget {
             Spacer(),
             Text(
               DateFormat('dd/MM/yyyy').format(
-                ChatController.to.chatList.value[idx]['time'],
+                ChatController.to.hiveChat.value[idx]['time'],
               ),
               style: CustomTextStyle.w400.copyWith(
                 fontSize: 14.sp,

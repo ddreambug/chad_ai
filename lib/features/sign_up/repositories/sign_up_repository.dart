@@ -1,6 +1,6 @@
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:chad_ai/utils/services/dio_service.dart';
-import '../../../shared/models/response_model.dart'; 
+import '../../../shared/models/response_model.dart';
 
 class SignUpRepository {
   final dio = DioService().getDio();

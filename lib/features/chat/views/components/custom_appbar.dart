@@ -1,5 +1,4 @@
 import 'package:chad_ai/configs/themes/main_color.dart';
-import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
@@ -36,9 +35,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       leading: useLeading
           ? GestureDetector(
-              onTap: () {
-                ChatController.to.scaffoldKey.currentState?.openDrawer();
-              },
+              onTap: () {},
               child: Container(
                 padding: EdgeInsets.only(left: 20.w),
                 child: Iconify(Charm.menu_hamburger),

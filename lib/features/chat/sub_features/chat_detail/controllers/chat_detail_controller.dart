@@ -1,5 +1,6 @@
 import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
 import 'package:chad_ai/utils/enums/enum.dart';
+import 'package:chad_ai/utils/services/hive_service.dart';
 import 'package:chad_ai/utils/services/utility_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,14 +46,23 @@ class ChatDetailController extends GetxController {
     super.onClose();
     if (chat.value != null && chat.value!.history.length >= 2 && save) {
       if (!compareChatData()) {
-        ChatController.to.chatList.value.add(
-          {
-            'id': DateTime.now().millisecondsSinceEpoch,
-            'time': DateTime.now(),
-            'data': chat.value!,
-          },
+        var id = DateTime.now().millisecondsSinceEpoch;
+        var time = DateTime.now();
+        // ChatController.to.chatList.value.add(
+        //   {
+        //     'id': id,
+        //     'time': time,
+        //     'data': chat.value!,
+        //   },
+        // );
+        HiveService.saveChat(
+          email: ChatController.to.currentEmail,
+          id: id,
+          time: time,
+          session: chat.value!,
         );
-        ChatController.to.chatList.refresh();
+
+        ChatController.to.getChats();
       }
     }
   }
@@ -60,7 +70,7 @@ class ChatDetailController extends GetxController {
   void deleteChat() {
     if (arguments != null) {
       int index = arguments['index'];
-      var chatList = ChatController.to.chatList;
+      var chatList = ChatController.to.hiveChat;
 
       if (index >= 0 && index < chatList.value.length) {
         chatList.value.removeAt(index);
@@ -95,7 +105,7 @@ class ChatDetailController extends GetxController {
       ChatDataType.text,
     );
 
-    return ChatController.to.chatList.value.any(
+    return ChatController.to.hiveChat.value.any(
       (chatMap) {
         return UtilityService.extractMessageText(
                 chatMap['data'] as ChatSession, 0, ChatDataType.text) ==

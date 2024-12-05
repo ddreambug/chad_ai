@@ -4,7 +4,6 @@ import 'package:chad_ai/configs/themes/main_theme.dart';
 import 'package:chad_ai/firebase_options.dart';
 import 'package:chad_ai/global_bindings/global_binding.dart';
 import 'package:chad_ai/global_controllers/analytics_controller.dart';
-import 'package:chad_ai/utils/services/hive_service.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,6 @@ void main() async {
   final dir = await getApplicationDocumentsDirectory();
   await Hive.initFlutter(dir.path);
   await Hive.openBox("chad_ai");
-  HiveService.initHiveUser();
 
   //firebase analytic init
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

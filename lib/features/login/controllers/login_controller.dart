@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:chad_ai/features/login/repositories/login_repository.dart';
 import 'package:chad_ai/global_controllers/global_controller.dart';
+import 'package:chad_ai/utils/services/hive_service.dart';
 import 'package:chad_ai/utils/services/sentry_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
@@ -32,8 +33,8 @@ class LoginController extends GetxController {
     return GlobalController.to.isConnect.value;
   }
 
-  Future<void> _navigateToChat() async {
-    Get.offNamed('chat');
+  Future<void> _navigateToChat({String? socialEmail}) async {
+    Get.offNamed('chat', arguments: socialEmail ?? emailController.text);
   }
 
   Future<void> signIn({
@@ -92,8 +93,11 @@ class LoginController extends GetxController {
         idToken: googleAuth.idToken,
       );
 
+      print('credential ok');
+
       FirebaseAuth.instance.signInWithCredential(credential);
 
+      print('firebase signin ok');
       await LoginRepository().login(
         username: googleUser.displayName!,
         email: googleUser.email,
@@ -102,7 +106,18 @@ class LoginController extends GetxController {
         isGoogle: true,
       );
 
-      await _navigateToChat();
+      print('loginrepo mockapi ok');
+
+      await HiveService.addUser(
+        nama: googleUser.displayName!,
+        email: googleUser.email,
+        password: 'default123',
+        pin: 1111,
+      );
+
+      print('hiveservice ok');
+
+      await _navigateToChat(socialEmail: googleUser.email);
     } catch (e, stacktrace) {
       await SentryService.handleAuthError(e, stacktrace);
     }
@@ -126,7 +141,7 @@ class LoginController extends GetxController {
         await FirebaseAuth.instance
             .signInWithCredential(facebookAuthCredential);
 
-        await _navigateToChat();
+        await _navigateToChat(socialEmail: facebookUser.message);
       } else {
         log('Facebook Login Failed: ${facebookUser.message}');
       }

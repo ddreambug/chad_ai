@@ -1,17 +1,13 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveService extends GetxService {
   HiveService._();
 
   static final box = Hive.box("chad_ai");
-
-  static void initHiveUser() {
-    box.put('account', {
-      'admin@gmail.com': 'admin',
-      'user': 'user',
-    });
-  }
 
   static Future<void> addUser({
     required String nama,
@@ -21,25 +17,63 @@ class HiveService extends GetxService {
   }) async {
     var box = Hive.box('chad_ai');
 
-    await box.put('username', nama);
-    await box.put('email', email);
-    await box.put('password', password);
-    await box.put('pin', pin);
+    // Get existing data
+    var existingData = box.get(email) ?? {};
+
+    // Merge new data with existing data
+    var updatedData = {
+      'username': nama,
+      'password': password,
+      'pin': pin,
+      'chats': existingData['chats'] ?? [],
+    };
+
+    try {
+      await box.put(email, updatedData);
+    } catch (e) {
+      log('Error saving data: $e');
+    }
   }
 
-  /// Kode untuk setting localstorage sesuai dengan repository
-  // static Future<void> setAuth(Data serverSelected) async {
-  //   await box.put("id", serverSelected.user!.id);
-  //   await box.put("name", serverSelected.user!.nama);
-  //   await box.put("photo", serverSelected.user!.humanisFoto);
-  //   await box.put("roles", serverSelected.user!.jabatan);
-  //   await box.put("isLogin", true);
+  static Future<void> saveChat({
+    required String email,
+    required int id,
+    required DateTime time,
+    required ChatSession session,
+  }) async {
+    var box = Hive.box('chad_ai');
 
-  //   /// Log id user
-  //   await FirebaseAnalytics.instance.setUserId(
-  //     id: serverSelected.user!.id.toString(),
-  //   );
-  // }
+    var userData = box.get(email);
+
+    if (userData != null) {
+      // Add the new chat
+      List<dynamic> chats = userData['chats'] ?? [];
+      chats.add({
+        'id': id,
+        'time': time,
+        'data': session,
+      });
+
+      // Update the user's data
+      userData['chats'] = chats;
+      await box.put(email, userData);
+    } else {
+      throw Exception('User not found');
+    }
+  }
+
+  static List<dynamic> getChats({required String email}) {
+    var box = Hive.box('chad_ai');
+
+    // Get the user's data
+    var userData = box.get(email);
+
+    if (userData != null) {
+      return userData['chats'] ?? [];
+    } else {
+      throw Exception('User not found');
+    }
+  }
 
   static Future deleteAuth() async {
     if (box.get("isRememberMe") == false) {

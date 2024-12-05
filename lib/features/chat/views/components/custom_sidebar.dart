@@ -1,7 +1,9 @@
 import 'package:chad_ai/configs/themes/main_color.dart';
 import 'package:chad_ai/features/chat/views/components/sidebar_content.dart';
 import 'package:chad_ai/shared/widgets/app_info.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
@@ -60,7 +62,10 @@ class CustomSidebar extends StatelessWidget {
             SidebarContent(
               leadingIcon: Carbon.logout,
               title: 'Logout',
-              onTap: () {
+              onTap: () async {
+                EasyLoading.show();
+                await FirebaseAuth.instance.signOut();
+                EasyLoading.dismiss();
                 Get.offAllNamed('/login');
               },
             ),
