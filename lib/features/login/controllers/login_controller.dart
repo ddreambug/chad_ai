@@ -33,8 +33,57 @@ class LoginController extends GetxController {
     return GlobalController.to.isConnect.value;
   }
 
-  Future<void> _navigateToChat({String? socialEmail}) async {
-    Get.offNamed('chat', arguments: socialEmail ?? emailController.text);
+  Future<void> _navigateToChat({String? socialEmail, String? avatar}) async {
+    var additionalData =
+        await getAdditionalData(email: socialEmail ?? emailController.text);
+    Get.offNamed(
+      'chat',
+      arguments: {
+        'name': additionalData['name'],
+        'pin': additionalData['pin'],
+        'isGoogle': additionalData['isGoogle'],
+        'email': socialEmail ?? emailController.text,
+        'password': socialEmail == null ? '' : passwordController.text,
+        'avatar': avatar ??
+            'https://st.depositphotos.com/1008402/58769/i/450/depositphotos_587692484-stock-illustration-illustration-smiling-woman-cartoon-close.jpg'
+      },
+    );
+  }
+
+  Future<Map<String, dynamic>> getAdditionalData(
+      {required String email}) async {
+    var userData = await LoginRepository().getUserData();
+    Map<String, dynamic> defaultValue = {
+      'pin': 1111,
+      'name': 'John Doe',
+      'avatar': '',
+      'isGoogle': false,
+    };
+
+    if (userData.statusCode == 200) {
+      final List users = userData.data;
+      final user = users.firstWhere(
+        (u) => u['email'] == email,
+        orElse: () => null,
+      );
+
+      if (user != null) {
+        return {
+          'pin': user['pin'],
+          'name': user['username'],
+          'avatar': user['avatar'],
+          'isGoogle': user['isGoogle'],
+        };
+      } else {
+        return defaultValue;
+      }
+    } else {
+      SentryService.handleAuthError(
+        'Mockapi Data Get Failed',
+        StackTrace.current,
+      );
+      return defaultValue;
+    }
   }
 
   Future<void> signIn({
@@ -110,6 +159,7 @@ class LoginController extends GetxController {
           await LoginRepository().login(
             username: googleUser.displayName!,
             email: googleUser.email,
+            avatar: googleUser.photoUrl,
             password: '',
             pin: 1111,
             isGoogle: true,
@@ -121,9 +171,15 @@ class LoginController extends GetxController {
             password: 'default123',
             pin: 1111,
           );
-          await _navigateToChat(socialEmail: googleUser.email);
+          await _navigateToChat(
+            socialEmail: googleUser.email,
+            avatar: googleUser.photoUrl,
+          );
         } else {
-          await _navigateToChat(socialEmail: googleUser.email);
+          await _navigateToChat(
+            socialEmail: googleUser.email,
+            avatar: googleUser.photoUrl,
+          );
         }
       }
     } catch (e, stacktrace) {

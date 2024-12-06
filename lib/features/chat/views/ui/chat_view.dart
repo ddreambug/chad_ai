@@ -21,7 +21,17 @@ class ChatView extends StatelessWidget {
       key: scaffoldKey,
       appBar: CustomAppbar(),
       drawer: CustomSidebar(),
-      floatingActionButton: CustomFab(),
+      floatingActionButton: Obx(
+        () {
+          var viewType = ChatController.to.viewType.value;
+
+          if (viewType == ViewType.allChat) {
+            return CustomFab();
+          } else {
+            return SizedBox.shrink();
+          }
+        },
+      ),
       body: Container(
         decoration: BoxDecoration(color: MainColor.primary),
         child: Obx(

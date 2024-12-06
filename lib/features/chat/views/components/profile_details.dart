@@ -1,4 +1,5 @@
 import 'package:chad_ai/configs/themes/main_color.dart';
+import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:chad_ai/shared/widgets/app_info.dart';
 import 'package:chad_ai/shared/widgets/custom_text_buttom.dart';
@@ -13,6 +14,8 @@ class ProfileDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var controller = ChatController.to;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(30).w,
@@ -20,13 +23,16 @@ class ProfileDetails extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 50.r,
+              backgroundImage: NetworkImage(
+                ChatController.to.currentAvatar,
+              ),
             ),
             SizedBox(height: 10.w),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'John Doe',
+                  controller.currentName,
                   style: CustomTextStyle.w600.copyWith(
                     fontSize: 20.sp,
                   ),
@@ -42,7 +48,7 @@ class ProfileDetails extends StatelessWidget {
             SizedBox(height: 20.w),
             CustomTextButtom(
               title: 'Email',
-              secondTitle: 'JohnDoe@gmail.com',
+              secondTitle: controller.currentEmail,
               secondTitleColor: MainColor.purple,
               ontap: () {},
             ),

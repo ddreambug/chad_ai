@@ -5,17 +5,28 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 
 class ChatController extends GetxController {
   static ChatController get to => Get.find();
+  var arguments = Get.arguments;
 
   late final GenerativeModel model;
   var chatList = Rx<List<Map<String, dynamic>>>([]);
-
+  late final String currentName;
+  late final int currentPin;
+  late final bool currentIsGoogle;
   late final String currentEmail;
+  late final String currentPassword;
+  late final String currentAvatar;
 
   @override
   void onInit() {
     super.onInit();
 
-    currentEmail = Get.arguments;
+    currentName = arguments['name'];
+    currentPin = arguments['pin'];
+    currentIsGoogle = arguments['isGoogle'];
+    currentEmail = arguments['email'];
+    currentPassword = arguments['password'];
+    currentAvatar = arguments['avatar'];
+
     getChats();
   }
 

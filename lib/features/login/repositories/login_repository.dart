@@ -9,6 +9,7 @@ class LoginRepository {
     required String username,
     required String email,
     required String password,
+    String? avatar,
     int pin = 1111,
     bool isGoogle = false,
   }) async {
@@ -20,6 +21,7 @@ class LoginRepository {
           "email": email,
           "password": password,
           "pin": pin,
+          "avatar": avatar,
           "isGoogle": isGoogle,
         },
       );

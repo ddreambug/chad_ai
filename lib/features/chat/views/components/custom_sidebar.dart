@@ -32,6 +32,9 @@ class CustomSidebar extends StatelessWidget {
                   child: Center(
                     child: CircleAvatar(
                       radius: 50.r,
+                      backgroundImage: NetworkImage(
+                        ChatController.to.currentAvatar,
+                      ),
                     ),
                   ),
                 ),
