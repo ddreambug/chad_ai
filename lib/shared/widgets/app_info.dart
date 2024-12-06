@@ -18,6 +18,7 @@ class AppInfo extends StatelessWidget {
       height: 61.w,
       width: 193.w,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           if (showVersion) ...{
             Text(

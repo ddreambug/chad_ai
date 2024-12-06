@@ -37,6 +37,9 @@ class CustomSidebar extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(
+              height: 20.w,
+            ),
             SidebarContent(
               leadingIcon: Carbon.new_tab,
               title: 'New Chat',
@@ -44,6 +47,7 @@ class CustomSidebar extends StatelessWidget {
                 Get.toNamed('/chat-details');
               },
             ),
+            const Divider(indent: 20, endIndent: 25),
             SidebarContent(
               leadingIcon: Carbon.list,
               title: 'All Chat',
@@ -53,6 +57,7 @@ class CustomSidebar extends StatelessWidget {
                 Get.back();
               },
             ),
+            const Divider(indent: 20, endIndent: 25),
             SidebarContent(
               leadingIcon: Carbon.archive,
               title: 'Achived Chat',
@@ -62,6 +67,7 @@ class CustomSidebar extends StatelessWidget {
                 Get.back();
               },
             ),
+            const Divider(indent: 20, endIndent: 25),
             SidebarContent(
               leadingIcon: Carbon.user,
               title: 'Profile',
@@ -71,6 +77,7 @@ class CustomSidebar extends StatelessWidget {
                 Get.back();
               },
             ),
+            const Divider(indent: 20, endIndent: 25),
             SidebarContent(
               leadingIcon: Carbon.logout,
               title: 'Logout',
