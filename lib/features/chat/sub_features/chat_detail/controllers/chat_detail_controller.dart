@@ -15,15 +15,16 @@ class ChatDetailController extends GetxController {
   final ScrollController scrollController = ScrollController();
   final TextEditingController textController = TextEditingController();
   final FocusNode textFieldFocus = FocusNode();
+  var savedChat = Rx<ChatSession?>(null);
   var isLoading = false.obs;
+  bool save = true;
+
   final safetySetting = [
     SafetySetting(HarmCategory.harassment, HarmBlockThreshold.none),
     SafetySetting(HarmCategory.hateSpeech, HarmBlockThreshold.none),
     SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.none),
     SafetySetting(HarmCategory.dangerousContent, HarmBlockThreshold.none),
   ];
-  var savedChat = Rx<ChatSession?>(null);
-  bool save = true;
 
   @override
   void onInit() {
@@ -73,6 +74,19 @@ class ChatDetailController extends GetxController {
       backToAllChat();
     } else {
       backToAllChat();
+    }
+  }
+
+  void archiveChat() {
+    if (arguments != null) {
+      int index = arguments['index'];
+      ChatController.to.apiSaveChat(index);
+      save = false;
+      Get.back();
+      Get.back();
+    } else {
+      Get.back();
+      Get.back();
     }
   }
 

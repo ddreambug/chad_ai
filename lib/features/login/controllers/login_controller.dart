@@ -39,6 +39,7 @@ class LoginController extends GetxController {
     Get.offNamed(
       'chat',
       arguments: {
+        'userId': additionalData['userId'],
         'name': additionalData['name'],
         'pin': additionalData['pin'],
         'isGoogle': additionalData['isGoogle'],
@@ -58,6 +59,7 @@ class LoginController extends GetxController {
       'name': 'John Doe',
       'avatar': '',
       'isGoogle': false,
+      'userId': '',
     };
 
     if (userData.statusCode == 200) {
@@ -73,6 +75,7 @@ class LoginController extends GetxController {
           'name': user['username'],
           'avatar': user['avatar'],
           'isGoogle': user['isGoogle'],
+          'userId': user['id'],
         };
       } else {
         return defaultValue;

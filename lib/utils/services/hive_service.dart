@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 
 class HiveService extends GetxService {
   HiveService._();
@@ -47,7 +48,7 @@ class HiveService extends GetxService {
       List<dynamic> chats = userData['chats'] ?? [];
       chats.add({
         'id': id,
-        'time': time,
+        'time': DateFormat('dd/MM/yyyy').format(time),
         'data': session,
       });
 
@@ -74,7 +75,7 @@ class HiveService extends GetxService {
 
   static Future<void> deleteChat({
     required String email,
-    required int chatIndex, 
+    required int chatIndex,
   }) async {
     var box = Hive.box('chad_ai');
     var userData = box.get(email);

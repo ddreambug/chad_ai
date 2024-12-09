@@ -17,7 +17,9 @@ class ChatDetailView extends StatelessWidget {
         useAction: true,
         onTap: () {
           Get.bottomSheet(BottomsheetType.allChat(
-            onArchive: () {},
+            onArchive: () {
+              ChatDetailController.to.archiveChat();
+            },
             onDelete: () {
               ChatDetailController.to.deleteChat();
             },

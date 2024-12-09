@@ -63,7 +63,10 @@ class ChatInput extends StatelessWidget {
                 height: 50.w,
                 width: 50.w,
                 child: controller.isLoading.value
-                    ? const CircularProgressIndicator(strokeWidth: 3)
+                    ? const CircularProgressIndicator(
+                        strokeWidth: 3,
+                        color: MainColor.purple,
+                      )
                     : IconButton(
                         onPressed: () {
                           controller.sendChatMessage(

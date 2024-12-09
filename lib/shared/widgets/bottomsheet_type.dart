@@ -17,6 +17,7 @@ class BottomsheetType {
   }) {
     return CustomBottomSheet(
       title: 'Chat Settings',
+      initSize: 0.45,
       widget: Column(
         children: [
           CustomTextButtom(
@@ -36,13 +37,16 @@ class BottomsheetType {
     );
   }
 
-  static Widget archivedChat() {
+  static Widget archivedChat({
+    required VoidCallback onDelete,
+  }) {
     return CustomBottomSheet(
       title: 'Chat Settings',
+      initSize: 0.35,
       widget: Column(
         children: [
           InkWell(
-            onTap: () {},
+            onTap: onDelete,
             child: Row(
               children: [
                 Text(

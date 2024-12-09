@@ -8,15 +8,16 @@ import 'package:chad_ai/utils/services/utility_service.dart';
 import 'package:get/get.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
-import 'package:intl/intl.dart';
 
 class ChatCard extends StatelessWidget {
   const ChatCard({
     super.key,
     required this.idx,
+    this.isArchived = false,
   });
 
   final int idx;
+  final bool isArchived;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,11 +36,14 @@ class ChatCard extends StatelessWidget {
             SizedBox(
               width: 230.w,
               child: Text(
-                UtilityService.extractMessageText(
-                  ChatController.to.chatList.value[idx]['data'],
-                  0,
-                  ChatDataType.text,
-                ),
+                isArchived
+                    ? ChatController.to.archivedChat.value[idx]['chatSession']
+                        [0]['data']
+                    : UtilityService.extractMessageText(
+                        ChatController.to.chatList.value[idx]['data'],
+                        0,
+                        ChatDataType.text,
+                      ),
                 style: CustomTextStyle.w500.copyWith(
                   fontSize: 16.sp,
                 ),
@@ -48,23 +52,33 @@ class ChatCard extends StatelessWidget {
             ),
             Spacer(),
             Text(
-              DateFormat('dd/MM/yyyy').format(
-                ChatController.to.chatList.value[idx]['time'],
-              ),
+              isArchived
+                  ? ChatController.to.archivedChat.value[idx]['date']
+                  : ChatController.to.chatList.value[idx]['time'],
               style: CustomTextStyle.w400.copyWith(
                 fontSize: 14.sp,
               ),
             ),
             GestureDetector(
               onTap: () {
-                Get.bottomSheet(
-                  BottomsheetType.allChat(
-                    onArchive: () {},
-                    onDelete: () {
-                      ChatController.to.deleteChat(idx);
-                    },
-                  ),
-                );
+                isArchived
+                    ? Get.bottomSheet(
+                        BottomsheetType.archivedChat(
+                          onDelete: () {
+                            ChatController.to.deleteChat(idx);
+                          },
+                        ),
+                      )
+                    : Get.bottomSheet(
+                        BottomsheetType.allChat(
+                          onArchive: () {
+                            ChatController.to.apiSaveChat(idx);
+                          },
+                          onDelete: () {
+                            ChatController.to.deleteChat(idx);
+                          },
+                        ),
+                      );
               },
               child: Iconify(Carbon.overflow_menu_vertical),
             ),

@@ -67,6 +67,7 @@ class CustomSidebar extends StatelessWidget {
               onTap: () {
                 ChatController.to.viewType.value = ViewType.archivedChat;
                 ChatController.to.appbarTitle.value = 'Archived Chat';
+                ChatController.to.updateArchivedChat();
                 Get.back();
               },
             ),
