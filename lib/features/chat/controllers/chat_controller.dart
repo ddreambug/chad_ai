@@ -36,6 +36,7 @@ class ChatController extends GetxController {
     currentAvatar = arguments['avatar'];
 
     getChats();
+    updateArchivedChat();
   }
 
   //Get
@@ -65,12 +66,49 @@ class ChatController extends GetxController {
       );
 
       if (response.statusCode == 201) {
+        updateArchivedChat();
         deleteChat(index, archived: true);
       }
       EasyLoading.dismiss();
     } catch (e, stacktrace) {
       EasyLoading.dismiss();
 
+      SentryService.handleAuthError(e, stacktrace);
+    }
+  }
+
+  void apiDeleteChat(int index) async {
+    try {
+      Get.back();
+      EasyLoading.show();
+      var response = await ChatRepositories().deleteChat(
+        userId: currentUserId,
+        chatId: archivedChat.value[index]['id'],
+      );
+
+      if (response.statusCode == 200) {
+        await updateArchivedChat();
+        if (ChatController.to.archivedChat.value.isEmpty) {
+          ChatController.to.viewType.value = ViewType.allChat;
+          ChatController.to.appbarTitle.value = 'All Chat';
+        }
+        print(ChatController.to.archivedChat.value.isEmpty);
+        EasyLoading.dismiss();
+
+        Get.showSnackbar(
+          GetSnackBar(
+            title: 'Chat Deleted',
+            message: 'Chat Deleted from Database',
+            duration: Duration(seconds: 1),
+            snackPosition: SnackPosition.TOP,
+          ),
+        );
+      } else {
+        EasyLoading.dismiss();
+
+        SentryService.handleAuthError('chat not found', StackTrace.current);
+      }
+    } catch (e, stacktrace) {
       SentryService.handleAuthError(e, stacktrace);
     }
   }
@@ -123,7 +161,7 @@ class ChatController extends GetxController {
     return extractedText;
   }
 
-  void updateArchivedChat() async {
+  Future<void> updateArchivedChat() async {
     try {
       var response = await ChatRepositories().getArchivedChat(
         userId: currentUserId,
@@ -131,8 +169,8 @@ class ChatController extends GetxController {
 
       if (response.statusCode == 200) {
         archivedChat.value = List<Map<String, dynamic>>.from(response.data);
+        archivedChat.refresh();
       }
-      print('archived chat ${archivedChat.value}');
     } catch (e) {
       print(e);
     }

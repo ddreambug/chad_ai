@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
 
 class CustomSidebar extends StatelessWidget {
@@ -61,14 +62,25 @@ class CustomSidebar extends StatelessWidget {
               },
             ),
             const Divider(indent: 20, endIndent: 25),
-            SidebarContent(
-              leadingIcon: Carbon.archive,
-              title: 'Achived Chat',
-              onTap: () {
-                ChatController.to.viewType.value = ViewType.archivedChat;
-                ChatController.to.appbarTitle.value = 'Archived Chat';
-                ChatController.to.updateArchivedChat();
-                Get.back();
+            Obx(
+              () {
+                var controller = ChatController.to.archivedChat.value;
+
+                return SidebarContent(
+                  leadingIcon: Carbon.archive,
+                  title: 'Archived Chat',
+                  customColor:
+                      controller.isNotEmpty ? MainColor.black : MainColor.grey,
+                  disableOntap: controller.isNotEmpty ? false : true,
+                  onTap: controller.isNotEmpty
+                      ? () {
+                          ChatController.to.viewType.value =
+                              ViewType.archivedChat;
+                          ChatController.to.appbarTitle.value = 'Archived Chat';
+                          Get.back();
+                        }
+                      : () {},
+                );
               },
             ),
             const Divider(indent: 20, endIndent: 25),
@@ -85,9 +97,11 @@ class CustomSidebar extends StatelessWidget {
             SidebarContent(
               leadingIcon: Carbon.logout,
               title: 'Logout',
+              customColor: MainColor.danger,
               onTap: () async {
                 EasyLoading.show();
                 await FirebaseAuth.instance.signOut();
+                await GoogleSignIn().signOut();
                 EasyLoading.dismiss();
                 Get.offAllNamed('/login');
               },

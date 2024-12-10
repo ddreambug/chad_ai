@@ -1,5 +1,7 @@
 import 'package:chad_ai/configs/routes/main_route.dart';
 import 'package:chad_ai/features/chat/bindings/chat_bindings.dart';
+import 'package:chad_ai/features/chat/sub_features/archive_detail/bindings/archive_detail_binding.dart';
+import 'package:chad_ai/features/chat/sub_features/archive_detail/views/ui/archive_detail_view.dart';
 import 'package:chad_ai/features/chat/sub_features/chat_detail/bindings/chat_detail_binding.dart';
 import 'package:chad_ai/features/chat/sub_features/chat_detail/views/ui/chat_detail_view.dart';
 import 'package:chad_ai/features/chat/views/ui/chat_view.dart';
@@ -21,6 +23,7 @@ abstract class MainPage {
       name: MainRoute.signUp,
       page: () => const SignUpView(),
       binding: SignUpBinding(),
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: MainRoute.privacyPolicy,
@@ -42,6 +45,12 @@ abstract class MainPage {
       page: () => const ChatDetailView(),
       transition: Transition.rightToLeft,
       binding: ChatDetailBinding(),
+    ),
+    GetPage(
+      name: MainRoute.archiveDetails,
+      page: () => const ArchiveDetailView(),
+      transition: Transition.rightToLeft,
+      binding: ArchiveDetailBinding(),
     ),
   ];
 }

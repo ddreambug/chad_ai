@@ -11,15 +11,20 @@ class SidebarContent extends StatelessWidget {
     required this.leadingIcon,
     required this.title,
     required this.onTap,
+    this.customColor = MainColor.black,
+    this.disableOntap = false,
   });
 
   final String leadingIcon;
   final String title;
   final VoidCallback onTap;
+  final Color customColor;
+  final bool disableOntap;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: disableOntap ? null : onTap,
       child: Container(
         padding: const EdgeInsets.only(
           left: 25,
@@ -32,21 +37,21 @@ class SidebarContent extends StatelessWidget {
               Iconify(
                 leadingIcon,
                 size: 14.w,
-                color: title == 'Logout' ? MainColor.danger : MainColor.black,
+                color: customColor,
               ),
               SizedBox(width: 20.w),
               Text(
                 title,
                 style: CustomTextStyle.w500.copyWith(
                   fontSize: 21.sp,
-                  color: title == 'Logout' ? MainColor.danger : MainColor.black,
+                  color: customColor,
                 ),
               ),
               Spacer(),
               Iconify(
                 Carbon.arrow_up_right,
                 size: 16.w,
-                color: title == 'Logout' ? MainColor.danger : MainColor.black,
+                color: customColor,
               ),
             ],
           ),

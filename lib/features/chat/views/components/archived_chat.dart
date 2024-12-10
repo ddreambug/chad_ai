@@ -24,10 +24,10 @@ class ArchivedChat extends StatelessWidget {
                 return GestureDetector(
                   onTap: () {
                     Get.toNamed(
-                      '/chat-details',
+                      '/archive-details',
                       arguments: {
                         'index': idx,
-                        'data': data[idx]['data'],
+                        'data': data[idx]['chatSession'],
                         'archived': true,
                       },
                     );

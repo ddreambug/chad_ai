@@ -136,6 +136,7 @@ class LoginController extends GetxController {
 
     try {
       //get user credential
+
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) return "modal dialog closed";
 

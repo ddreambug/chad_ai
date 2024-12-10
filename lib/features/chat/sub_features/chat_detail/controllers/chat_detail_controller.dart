@@ -18,6 +18,7 @@ class ChatDetailController extends GetxController {
   var savedChat = Rx<ChatSession?>(null);
   var isLoading = false.obs;
   bool save = true;
+  bool canArchive = false;
 
   final safetySetting = [
     SafetySetting(HarmCategory.harassment, HarmBlockThreshold.none),
@@ -39,6 +40,7 @@ class ChatDetailController extends GetxController {
 
     if (arguments != null) {
       chat.value = arguments['data'];
+      canArchive = true;
     }
   }
 

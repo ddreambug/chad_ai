@@ -68,13 +68,6 @@ class ProfileDetails extends StatelessWidget {
             ),
             const Divider(),
             CustomTextButtom(
-              title: 'Data & Storage',
-              secondTitle: '28% Used',
-              ontap: () {},
-              icon: Carbon.arrow_up_right,
-            ),
-            const Divider(),
-            CustomTextButtom(
               title: 'Change Pin',
               ontap: () {},
               icon: Carbon.arrow_up_right,

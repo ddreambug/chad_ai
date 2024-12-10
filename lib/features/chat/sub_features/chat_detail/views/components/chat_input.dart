@@ -34,7 +34,7 @@ class ChatInput extends StatelessWidget {
                       Radius.circular(20.r),
                     ),
                     borderSide: BorderSide(
-                      color: MainColor.borderStroke,
+                      color: MainColor.textGrey,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
@@ -42,7 +42,7 @@ class ChatInput extends StatelessWidget {
                       Radius.circular(60.r),
                     ),
                     borderSide: BorderSide(
-                      color: MainColor.borderStroke,
+                      color: MainColor.textGrey,
                     ),
                   ),
                 ),

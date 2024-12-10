@@ -24,7 +24,7 @@ class ChatDetailItem extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(
                 width: 1.5.r,
-                color: MainColor.borderStroke,
+                color: MainColor.textGrey,
               ),
               color: isFromUser
                   ? const Color.fromARGB(30, 98, 42, 116)
@@ -38,9 +38,9 @@ class ChatDetailItem extends StatelessWidget {
                     isFromUser ? Radius.circular(40.r) : Radius.circular(0.r),
               ),
             ),
-            padding: const EdgeInsets.symmetric(
-              vertical: 15,
-              horizontal: 30,
+            padding: EdgeInsets.symmetric(
+              vertical: isFromUser ? 7 : 15,
+              horizontal: 18,
             ).w,
             margin: const EdgeInsets.only(
               bottom: 15,

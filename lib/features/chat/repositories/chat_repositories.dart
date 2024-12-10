@@ -58,4 +58,30 @@ class ChatRepositories {
       rethrow;
     }
   }
+
+  Future<ResponseModel> deleteChat({
+    required String userId,
+    required String chatId,
+  }) async {
+    try {
+      final response = await dio.delete(
+        '/users/$userId/chat/$chatId',
+      );
+
+      if (response.statusCode == 200) {
+        return ResponseModel(
+          statusCode: response.statusCode,
+          data: response.data,
+        );
+      } else {
+        return ResponseModel(
+          statusCode: response.statusCode,
+          data: response.data,
+        );
+      }
+    } catch (e, stacktrace) {
+      SentryService.handleAuthError(e, stacktrace);
+      rethrow;
+    }
+  }
 }

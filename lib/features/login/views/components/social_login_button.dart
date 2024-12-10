@@ -16,6 +16,7 @@ class SocialLoginButton extends StatelessWidget {
       children: [
         CustomButton(
           onPress: () async {
+            
             var login = await LoginController.to.signInWithGoogle(context);
             log('google button triggered $login');
           },

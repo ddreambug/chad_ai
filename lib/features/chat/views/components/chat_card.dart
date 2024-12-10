@@ -65,7 +65,7 @@ class ChatCard extends StatelessWidget {
                     ? Get.bottomSheet(
                         BottomsheetType.archivedChat(
                           onDelete: () {
-                            ChatController.to.deleteChat(idx);
+                            ChatController.to.apiDeleteChat(idx);
                           },
                         ),
                       )
@@ -73,6 +73,7 @@ class ChatCard extends StatelessWidget {
                         BottomsheetType.allChat(
                           onArchive: () {
                             ChatController.to.apiSaveChat(idx);
+                            ChatController.to.updateArchivedChat();
                           },
                           onDelete: () {
                             ChatController.to.deleteChat(idx);

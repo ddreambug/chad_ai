@@ -11,6 +11,7 @@ import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/icon_park_solid.dart';
 import 'package:iconify_flutter/icons/majesticons.dart';
 import 'package:iconify_flutter/icons/material_symbols.dart';
@@ -24,37 +25,49 @@ class SignUpView extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: MainColor.primary,
-        title: Text(
-          'Sign Up',
-          style: CustomTextStyle.w500.copyWith(fontSize: 22.sp),
-        ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
-          child: Divider(
-            height: 1.0,
-            color: Colors.grey,
-          ),
-        ),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: MainColor.primary,
+      //   title: Text(
+      //     'Sign Up',
+      //     style: CustomTextStyle.w500.copyWith(fontSize: 22.sp),
+      //   ),
+      //   bottom: PreferredSize(
+      //     preferredSize: Size.fromHeight(1.0),
+      //     child: Divider(
+      //       height: 1.0,
+      //       color: Colors.grey,
+      //     ),
+      //   ),
+      // ),
       body: Container(
         decoration: BoxDecoration(
           color: MainColor.primary,
         ),
-        padding: const EdgeInsets.fromLTRB(20, 25, 20, 35).w,
+        padding: const EdgeInsets.fromLTRB(20, 80, 20, 35).w,
         child: Form(
           key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Sign Up',
-                style: CustomTextStyle.w600.copyWith(
-                  fontSize: 40.sp,
-                  letterSpacing: -1,
-                ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: Iconify(MaterialSymbols.arrow_back_ios_rounded),
+                  ),
+                  Text(
+                    'Sign Up',
+                    style: CustomTextStyle.w600.copyWith(
+                      fontSize: 40.sp,
+                      letterSpacing: -1,
+                    ),
+                  ),
+                ],
               ),
+              SizedBox(height: 20.w),
               Text(
                 'Fill the form below to sign up!',
                 style: CustomTextStyle.w400.copyWith(
@@ -63,7 +76,7 @@ class SignUpView extends StatelessWidget {
                   letterSpacing: 0.2,
                 ),
               ),
-              SizedBox(height: 25.w),
+              SizedBox(height: 10.w),
               CustomTextField(
                 hintText: 'Name',
                 controller: SignUpController.to.usernameController,
@@ -163,7 +176,7 @@ class SignUpView extends StatelessWidget {
               ),
               Spacer(),
               Center(
-                child: AppInfo(),
+                child: AppInfo(showVersion: true),
               ),
             ],
           ),
