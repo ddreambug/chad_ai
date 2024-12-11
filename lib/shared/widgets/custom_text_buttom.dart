@@ -15,6 +15,7 @@ class CustomTextButtom extends StatelessWidget {
     this.secondTitleColor = MainColor.black,
     this.secondTitle = '',
     this.description = '',
+    this.isGoogle = false,
   });
 
   final String icon;
@@ -24,13 +25,14 @@ class CustomTextButtom extends StatelessWidget {
   final Color secondTitleColor;
   final String secondTitle;
   final String description;
+  final bool isGoogle;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: MainColor.primary,
       child: InkWell(
-        onTap: ontap,
+        onTap: isGoogle ? null : ontap,
         child: SizedBox(
           height: description == '' ? 25 : 50,
           child: Column(

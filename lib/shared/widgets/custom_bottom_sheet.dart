@@ -74,7 +74,7 @@ class CustomBottomSheet extends StatelessWidget {
                       if (title != '')
                         Text(
                           title,
-                          style: CustomTextStyle.w500,
+                          style: CustomTextStyle.w600,
                         ),
                       Padding(
                         padding: EdgeInsets.all(30.r),

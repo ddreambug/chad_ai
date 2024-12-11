@@ -2,8 +2,10 @@ import 'package:chad_ai/configs/themes/main_color.dart';
 import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:chad_ai/shared/widgets/app_info.dart';
+import 'package:chad_ai/shared/widgets/bottomsheet_type.dart';
 import 'package:chad_ai/shared/widgets/custom_text_buttom.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
 import 'package:iconify_flutter/icons/ic.dart';
@@ -71,19 +73,31 @@ class ProfileDetails extends StatelessWidget {
               title: 'Change Pin',
               ontap: () {},
               icon: Carbon.arrow_up_right,
+              isGoogle: ChatController.to.currentIsGoogle,
+              color: ChatController.to.currentIsGoogle
+                  ? MainColor.textGrey
+                  : MainColor.black,
             ),
             const Divider(),
             CustomTextButtom(
               title: 'Change Password',
               ontap: () {},
               icon: Carbon.arrow_up_right,
+              isGoogle: ChatController.to.currentIsGoogle,
+              color: ChatController.to.currentIsGoogle
+                  ? MainColor.textGrey
+                  : MainColor.black,
             ),
             const Divider(),
             CustomTextButtom(
               title: 'Send Feedback',
               description:
                   'Chatbot AI can make mistakes. Consider checking important information and send us your feedback.',
-              ontap: () {},
+              ontap: () {
+                Get.bottomSheet(
+                  BottomsheetType.sendFeedback(onDelete: () {}),
+                );
+              },
               icon: Carbon.arrow_up_right,
             ),
             Spacer(),

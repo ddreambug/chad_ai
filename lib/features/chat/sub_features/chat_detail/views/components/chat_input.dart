@@ -20,14 +20,18 @@ class ChatInput extends StatelessWidget {
         children: [
           // Input TextField
           Expanded(
-            child: SizedBox(
-              height: 50.w,
+            child: Container(
+              constraints: BoxConstraints(minHeight: 50.w),
               child: TextField(
+                maxLines: 4,
+                minLines: 1,
                 focusNode: controller.textFieldFocus,
+                keyboardType: TextInputType.multiline,
                 style: CustomTextStyle.w500.copyWith(fontSize: 16.sp),
                 decoration: InputDecoration(
+                  isDense: true,
                   hintText: 'Ask Me Anything...',
-                  contentPadding: EdgeInsets.fromLTRB(15, 0, 15, 0).w,
+                  contentPadding: EdgeInsets.fromLTRB(15, 20, 15, 5).w,
                   hintStyle: CustomTextStyle.w500.copyWith(fontSize: 16.sp),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(
@@ -39,7 +43,7 @@ class ChatInput extends StatelessWidget {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(
-                      Radius.circular(60.r),
+                      Radius.circular(20.r),
                     ),
                     borderSide: BorderSide(
                       color: MainColor.textGrey,
