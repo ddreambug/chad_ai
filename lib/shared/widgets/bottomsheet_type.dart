@@ -1,4 +1,5 @@
 import 'package:chad_ai/configs/themes/main_color.dart';
+import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:chad_ai/shared/widgets/custom_bottom_sheet.dart';
 import 'package:chad_ai/shared/widgets/custom_button.dart';
@@ -74,55 +75,71 @@ class BottomsheetType {
   static Widget sendFeedback({
     required VoidCallback onDelete,
   }) {
+    var formKey = GlobalKey<FormState>();
     return CustomBottomSheet(
       title: 'Feedback',
       initSize: 0.65,
-      widget: Column(
-        children: [
-          TextField(
-            maxLines: null,
-            cursorHeight: 15,
-            keyboardType: TextInputType.multiline,
-            style: CustomTextStyle.w400.copyWith(fontSize: 18.sp),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(20.r),
+      widget: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            TextFormField(
+              controller: ChatController.to.feedbackController,
+              maxLines: 3,
+              minLines: 1,
+              cursorHeight: 15,
+              keyboardType: TextInputType.multiline,
+              style: CustomTextStyle.w400.copyWith(fontSize: 18.sp),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your feedback';
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20.r),
+                  ),
+                ),
+                hintText: 'Enter your feedback here...',
+                hintStyle: CustomTextStyle.w400.copyWith(
+                  fontSize: 18.sp,
+                  color: MainColor.textGrey,
                 ),
               ),
-              hintText: 'Enter your feedback here...',
-              hintStyle: CustomTextStyle.w400.copyWith(
-                fontSize: 18.sp,
-                color: MainColor.textGrey,
+            ),
+            SizedBox(height: 20.w),
+            //button
+            SizedBox(
+              width: 340.w,
+              child: Row(
+                children: [
+                  CustomButton(
+                    onPress: () {
+                      Get.back();
+                    },
+                    title: 'Cancel',
+                    buttonWidth: 160,
+                    buttonHeight: 50,
+                  ),
+                  Spacer(),
+                  CustomButton(
+                    onPress: () {
+                      if (formKey.currentState?.validate() ?? false) {
+                        ChatController.to.postFeedback();
+                      }
+                    },
+                    title: 'Send',
+                    buttonWidth: 160,
+                    buttonHeight: 50,
+                    buttonColor: MainColor.black,
+                  ),
+                ],
               ),
             ),
-          ),
-          SizedBox(height: 20.w),
-          //button
-          SizedBox(
-            width: 340.w,
-            child: Row(
-              children: [
-                CustomButton(
-                  onPress: () {
-                    Get.back();
-                  },
-                  title: 'Cancel',
-                  buttonWidth: 160,
-                  buttonHeight: 50,
-                ),
-                Spacer(),
-                CustomButton(
-                  onPress: () {},
-                  title: 'Send',
-                  buttonWidth: 160,
-                  buttonHeight: 50,
-                  buttonColor: MainColor.black,
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -3,9 +3,11 @@ import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:chad_ai/utils/services/hive_service.dart';
 import 'package:chad_ai/utils/services/sentry_service.dart';
 import 'package:chad_ai/utils/services/utility_service.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:intl/intl.dart';
 
 class ChatController extends GetxController {
   static ChatController get to => Get.find();
@@ -14,7 +16,6 @@ class ChatController extends GetxController {
   late final GenerativeModel model;
   var chatList = Rx<List<Map<String, dynamic>>>([]);
   var archivedChat = Rx<List<Map<String, dynamic>>>([]);
-
   late final String currentUserId;
   late final String currentName;
   late final int currentPin;
@@ -22,6 +23,8 @@ class ChatController extends GetxController {
   late final String currentEmail;
   late final String currentPassword;
   late final String currentAvatar;
+
+  TextEditingController feedbackController = TextEditingController();
 
   @override
   void onInit() {
@@ -45,15 +48,12 @@ class ChatController extends GetxController {
 
     chatList.value = List<Map<String, dynamic>>.from(chats);
     chatList.refresh();
-
-    print(chatList);
   }
 
-  // //Api Post
+  // Api Post
   void apiSaveChat(int index) async {
     Get.back();
     EasyLoading.show();
-    print('archive triggered');
     var chatData = chatList.value[index];
     var splittedChat = splitChatSession(chatData['data']);
 
@@ -77,6 +77,7 @@ class ChatController extends GetxController {
     }
   }
 
+  // Api Delete
   void apiDeleteChat(int index) async {
     try {
       Get.back();
@@ -92,7 +93,6 @@ class ChatController extends GetxController {
           ChatController.to.viewType.value = ViewType.allChat;
           ChatController.to.appbarTitle.value = 'All Chat';
         }
-        print(ChatController.to.archivedChat.value.isEmpty);
         EasyLoading.dismiss();
 
         Get.showSnackbar(
@@ -173,6 +173,40 @@ class ChatController extends GetxController {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  void postFeedback() async {
+    EasyLoading.show();
+    var response = await ChatRepositories().sendFeedback(
+      userId: currentUserId,
+      name: currentName,
+      date: DateFormat('dd/MM/yyyy HH:mm:ss', 'id_ID').format(DateTime.now()),
+      feedback: feedbackController.text,
+    );
+
+    if (response.statusCode == 201) {
+      EasyLoading.dismiss();
+      feedbackController.clear();
+      Get.back();
+
+      Get.showSnackbar(
+        GetSnackBar(
+          title: 'Feedback Sent',
+          message: 'Thanks for your feedback!',
+          duration: Duration(seconds: 1),
+          snackPosition: SnackPosition.TOP,
+        ),
+      );
+    } else {
+      Get.showSnackbar(
+        GetSnackBar(
+          title: 'Something Wrong!',
+          message: 'Something Wrong!',
+          duration: Duration(seconds: 1),
+          snackPosition: SnackPosition.TOP,
+        ),
+      );
     }
   }
 
