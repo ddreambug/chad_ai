@@ -47,6 +47,7 @@ class ChatCard extends StatelessWidget {
                 style: CustomTextStyle.w500.copyWith(
                   fontSize: 16.sp,
                 ),
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ),

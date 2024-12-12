@@ -1,4 +1,5 @@
 import 'package:chad_ai/configs/themes/main_color.dart';
+import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
 import 'package:chad_ai/features/login/controllers/login_controller.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,9 @@ class CustomTextField extends StatefulWidget {
     this.obscureType = '',
     required this.controller,
     this.validator,
+    this.isProfileEdit = false,
+    this.customHeight = 50,
+    this.isArea = false,
   });
 
   final TextEditingController controller;
@@ -22,6 +26,9 @@ class CustomTextField extends StatefulWidget {
   final String hintText;
   final String obscureType;
   final FormFieldValidator<String>? validator;
+  final bool isProfileEdit;
+  final bool isArea;
+  final int customHeight;
 
   @override
   CustomTextFieldState createState() => CustomTextFieldState();
@@ -60,41 +67,51 @@ class CustomTextFieldState extends State<CustomTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          height: 56.h,
+          height: widget.customHeight.h,
           width: double.infinity,
           decoration: BoxDecoration(
             border: Border.all(
               color: _isFocused
-                  ? MainColor.blue
+                  ? MainColor.purple
                   : MainColor.textGrey.withAlpha(90),
             ),
-            borderRadius: BorderRadius.circular(20.r),
+            borderRadius: BorderRadius.circular(15.r),
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Row(
               children: [
-                Iconify(
-                  widget.iconifyIcon,
-                  color: _isFocused ? MainColor.purple : MainColor.textGrey,
-                  size: 28.w,
-                ),
-                SizedBox(width: 15.w),
+                if (widget.iconifyIcon != '') ...{
+                  Iconify(
+                    widget.iconifyIcon,
+                    color: _isFocused ? MainColor.purple : MainColor.textGrey,
+                    size: 28.w,
+                  ),
+                  SizedBox(width: 15.w),
+                },
                 Expanded(
                   child: Obx(
                     () {
-                      var isObscure =
-                          LoginController.to.obscureStates[widget.obscureType];
-                      var pinLength = LoginController.to.pinLength.value;
+                      var isObscure = widget.isProfileEdit
+                          ? ChatController.to.obscureStates[widget.obscureType]
+                          : LoginController
+                              .to.obscureStates[widget.obscureType];
+
+                      var pinLength = widget.isProfileEdit
+                          ? null
+                          : LoginController.to.pinLength.value;
 
                       return TextFormField(
                         controller: widget.controller,
+                        maxLines: widget.isArea ? 3 : 1,
                         obscureText:
                             widget.obscureType != '' ? isObscure! : false,
                         validator: widget.validator,
                         keyboardType: widget.obscureType == 'pin'
                             ? TextInputType.phone
-                            : null,
+                            : widget.isArea
+                                ? TextInputType.multiline
+                                : TextInputType.text,
                         maxLength: widget.obscureType == 'pin' ? 4 : null,
                         focusNode: _focusNode,
                         style: CustomTextStyle.w500.copyWith(fontSize: 16.sp),
@@ -129,12 +146,18 @@ class CustomTextFieldState extends State<CustomTextField> {
                 if (widget.obscureType != '') ...{
                   Obx(
                     () {
-                      var isObscure =
-                          LoginController.to.obscureStates[widget.obscureType];
+                      var isObscure = widget.isProfileEdit
+                          ? ChatController.to.obscureStates[widget.obscureType]
+                          : LoginController
+                              .to.obscureStates[widget.obscureType];
 
                       return GestureDetector(
                         onTap: () {
-                          LoginController.to.toggleObscure(widget.obscureType);
+                          widget.isProfileEdit
+                              ? ChatController.to
+                                  .toggleObscure(widget.obscureType)
+                              : LoginController.to
+                                  .toggleObscure(widget.obscureType);
                         },
                         child: Padding(
                           padding: EdgeInsets.only(left: 5.w),

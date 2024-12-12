@@ -78,7 +78,7 @@ class SignUpView extends StatelessWidget {
               ),
               SizedBox(height: 10.w),
               CustomTextField(
-                hintText: 'Name',
+                hintText: 'Nickname',
                 controller: SignUpController.to.usernameController,
                 iconifyIcon: IconParkSolid.people,
                 validator: (value) {

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chad_ai/features/chat/repositories/chat_repositories.dart';
 import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:chad_ai/utils/services/hive_service.dart';
@@ -17,21 +19,30 @@ class ChatController extends GetxController {
   var chatList = Rx<List<Map<String, dynamic>>>([]);
   var archivedChat = Rx<List<Map<String, dynamic>>>([]);
   late final String currentUserId;
-  late final String currentName;
-  late final int currentPin;
   late final bool currentIsGoogle;
   late final String currentEmail;
-  late final String currentPassword;
-  late final String currentAvatar;
+  late int currentPin;
+  late String currentPassword;
+  late String currentAvatar;
+  RxString currentName = ''.obs;
 
+  TextEditingController newNameController = TextEditingController();
   TextEditingController feedbackController = TextEditingController();
+  TextEditingController securityController = TextEditingController();
+  TextEditingController newSecurityController = TextEditingController();
+  TextEditingController retypeNewSecurityController = TextEditingController();
+  var obscureStates = {
+    'current': true,
+    'new': true,
+    'retypeNew': true,
+  }.obs;
 
   @override
   void onInit() {
     super.onInit();
 
     currentUserId = arguments['userId'];
-    currentName = arguments['name'];
+    currentName.value = arguments['name'];
     currentPin = arguments['pin'];
     currentIsGoogle = arguments['isGoogle'];
     currentEmail = arguments['email'];
@@ -40,6 +51,10 @@ class ChatController extends GetxController {
 
     getChats();
     updateArchivedChat();
+  }
+
+  void toggleObscure(String fieldKey) {
+    obscureStates[fieldKey] = !(obscureStates[fieldKey] ?? true);
   }
 
   //Get
@@ -113,6 +128,77 @@ class ChatController extends GetxController {
     }
   }
 
+  //Update db
+  Future<void> apiUpdateSecurity({required bool isPin}) async {
+    try {
+      EasyLoading.show();
+      var response = await ChatRepositories().updateSecurity(
+        userId: currentUserId,
+        newSecurity: newSecurityController.text,
+        isPin: isPin,
+      );
+      if (response.statusCode == 200) {
+        isPin
+            ? currentPin = int.parse(newSecurityController.text)
+            : currentPassword = newSecurityController.text;
+
+        EasyLoading.dismiss();
+        Get.back();
+        Get.showSnackbar(
+          GetSnackBar(
+            title: 'Success',
+            message: isPin
+                ? 'Pin Changed Successfully'
+                : 'Password Changed Successfully',
+            duration: Duration(seconds: 1),
+            snackPosition: SnackPosition.TOP,
+          ),
+        );
+      } else {
+        log('update security failed');
+        SentryService.handleAuthError(
+          'Update security failed',
+          StackTrace.current,
+        );
+      }
+    } catch (e, stacktrace) {
+      SentryService.handleAuthError(e, stacktrace);
+    }
+  }
+
+  //update name
+  Future<void> apiUpdateName() async {
+    try {
+      EasyLoading.show();
+      var response = await ChatRepositories().updateName(
+        userId: currentUserId,
+        newName: newNameController.text,
+      );
+      if (response.statusCode == 200) {
+        currentName.value = newNameController.text;
+
+        EasyLoading.dismiss();
+        Get.back();
+        Get.showSnackbar(
+          GetSnackBar(
+            title: 'Success',
+            message: 'Nickname Changed Successfully',
+            duration: Duration(seconds: 1),
+            snackPosition: SnackPosition.TOP,
+          ),
+        );
+      } else {
+        log('update name failed');
+        SentryService.handleAuthError(
+          'Update name failed',
+          StackTrace.current,
+        );
+      }
+    } catch (e, stacktrace) {
+      SentryService.handleAuthError(e, stacktrace);
+    }
+  }
+
   //Delete
   void deleteChat(int index, {bool archived = false}) {
     HiveService.deleteChat(
@@ -180,7 +266,7 @@ class ChatController extends GetxController {
     EasyLoading.show();
     var response = await ChatRepositories().sendFeedback(
       userId: currentUserId,
-      name: currentName,
+      name: currentName.value,
       date: DateFormat('dd/MM/yyyy HH:mm:ss', 'id_ID').format(DateTime.now()),
       feedback: feedbackController.text,
     );

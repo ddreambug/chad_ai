@@ -87,10 +87,65 @@ class ChatRepositories {
   }
 
   /// Profile
-  void updateName() {}
   void updateAvatar() {}
-  void updatePin() {}
-  void updatePassword() {}
+
+  Future<ResponseModel> updateName({
+    required String userId,
+    required String newName,
+  }) async {
+    try {
+      final response = await dio.put(
+        '/users/$userId',
+        data: [
+          {"username": newName}
+        ],
+      );
+
+      if (response.statusCode == 200) {
+        return ResponseModel(
+          statusCode: response.statusCode,
+          data: response.data,
+        );
+      } else {
+        return ResponseModel(
+          statusCode: response.statusCode,
+          data: response.data,
+        );
+      }
+    } catch (e, stacktrace) {
+      SentryService.handleAuthError(e, stacktrace);
+      rethrow;
+    }
+  }
+
+  Future<ResponseModel> updateSecurity({
+    required String userId,
+    required String newSecurity,
+    bool isPin = false,
+  }) async {
+    try {
+      final response = await dio.put(
+        '/users/$userId',
+        data:
+            isPin ? {'pin': int.parse(newSecurity)} : {'password': newSecurity},
+      );
+
+      if (response.statusCode == 200) {
+        return ResponseModel(
+          statusCode: response.statusCode,
+          data: response.data,
+        );
+      } else {
+        return ResponseModel(
+          statusCode: response.statusCode,
+          data: response.data,
+        );
+      }
+    } catch (e, stacktrace) {
+      SentryService.handleAuthError(e, stacktrace);
+      rethrow;
+    }
+  }
 
   Future<ResponseModel> sendFeedback({
     required String userId,

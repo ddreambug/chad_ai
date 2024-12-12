@@ -44,7 +44,7 @@ class LoginController extends GetxController {
         'pin': additionalData['pin'],
         'isGoogle': additionalData['isGoogle'],
         'email': socialEmail ?? emailController.text,
-        'password': socialEmail == null ? '' : passwordController.text,
+        'password': socialEmail == null ? passwordController.text : '',
         'avatar': avatar ??
             'https://st.depositphotos.com/1008402/58769/i/450/depositphotos_587692484-stock-illustration-illustration-smiling-woman-cartoon-close.jpg'
       },

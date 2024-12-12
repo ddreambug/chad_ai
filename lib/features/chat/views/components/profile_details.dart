@@ -4,6 +4,7 @@ import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:chad_ai/shared/widgets/app_info.dart';
 import 'package:chad_ai/shared/widgets/bottomsheet_type.dart';
 import 'package:chad_ai/shared/widgets/custom_text_buttom.dart';
+import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
@@ -33,17 +34,27 @@ class ProfileDetails extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  controller.currentName,
-                  style: CustomTextStyle.w600.copyWith(
-                    fontSize: 20.sp,
+                Obx(
+                  () => Text(
+                    controller.currentName.value,
+                    style: CustomTextStyle.w600.copyWith(
+                      fontSize: 20.sp,
+                    ),
                   ),
                 ),
                 SizedBox(width: 5.w),
-                Iconify(
-                  Ic.baseline_mode_edit,
-                  color: MainColor.textGrey,
-                  size: 22.w,
+                GestureDetector(
+                  onTap: () {
+                    Get.bottomSheet(
+                      isDismissible: false,
+                      BottomsheetType.changeName(),
+                    );
+                  },
+                  child: Iconify(
+                    Ic.baseline_mode_edit,
+                    color: MainColor.textGrey,
+                    size: 22.w,
+                  ),
                 ),
               ],
             ),
@@ -71,7 +82,14 @@ class ProfileDetails extends StatelessWidget {
             const Divider(),
             CustomTextButtom(
               title: 'Change Pin',
-              ontap: () {},
+              ontap: () {
+                Get.bottomSheet(
+                  isDismissible: false,
+                  BottomsheetType.changeSecurity(
+                    securityType: SecurityType.pin,
+                  ),
+                );
+              },
               icon: Carbon.arrow_up_right,
               isGoogle: ChatController.to.currentIsGoogle,
               color: ChatController.to.currentIsGoogle
@@ -81,7 +99,14 @@ class ProfileDetails extends StatelessWidget {
             const Divider(),
             CustomTextButtom(
               title: 'Change Password',
-              ontap: () {},
+              ontap: () {
+                Get.bottomSheet(
+                  isDismissible: false,
+                  BottomsheetType.changeSecurity(
+                    securityType: SecurityType.password,
+                  ),
+                );
+              },
               icon: Carbon.arrow_up_right,
               isGoogle: ChatController.to.currentIsGoogle,
               color: ChatController.to.currentIsGoogle
@@ -95,7 +120,8 @@ class ProfileDetails extends StatelessWidget {
                   'Chatbot AI can make mistakes. Consider checking important information and send us your feedback.',
               ontap: () {
                 Get.bottomSheet(
-                  BottomsheetType.sendFeedback(onDelete: () {}),
+                  isDismissible: false,
+                  BottomsheetType.sendFeedback(),
                 );
               },
               icon: Carbon.arrow_up_right,

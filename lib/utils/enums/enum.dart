@@ -19,3 +19,8 @@ enum ViewType {
   archivedChat,
   profile,
 }
+
+enum SecurityType {
+  pin,
+  password,
+}
