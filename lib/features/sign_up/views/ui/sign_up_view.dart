@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:chad_ai/configs/themes/main_color.dart';
 import 'package:chad_ai/features/sign_up/controllers/sign_up_controller.dart';
-import 'package:chad_ai/features/sign_up/views/components/otp_dialog.dart';
+import 'package:chad_ai/shared/widgets/otp_dialog.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:chad_ai/shared/widgets/app_info.dart';
 import 'package:chad_ai/shared/widgets/custom_button.dart';
@@ -160,7 +160,11 @@ class SignUpView extends StatelessWidget {
                     log('Sign Up form is valid!');
                     await SignUpController.to.sendEmailOtp();
 
-                    Get.dialog(OtpDialog());
+                    Get.dialog(
+                      OtpDialog(
+                        isSignUp: true,
+                      ),
+                    );
                   } else {
                     log('Sign Up form is invalid!');
                     PanaraInfoDialog.show(context,

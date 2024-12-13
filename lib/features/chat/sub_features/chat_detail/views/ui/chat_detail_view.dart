@@ -14,7 +14,7 @@ class ChatDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppbar(
-        title: 'Chat Details',
+        title: 'Chat Details'.tr,
         useAction: true,
         onTap: () {
           ChatDetailController.to.canArchive

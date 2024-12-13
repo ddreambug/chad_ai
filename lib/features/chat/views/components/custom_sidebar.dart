@@ -46,7 +46,7 @@ class CustomSidebar extends StatelessWidget {
             ),
             SidebarContent(
               leadingIcon: Carbon.new_tab,
-              title: 'New Chat',
+              title: 'New Chat'.tr,
               onTap: () {
                 Get.toNamed('/chat-details');
               },
@@ -54,10 +54,10 @@ class CustomSidebar extends StatelessWidget {
             const Divider(indent: 20, endIndent: 25),
             SidebarContent(
               leadingIcon: Carbon.list,
-              title: 'All Chat',
+              title: 'All Chat'.tr,
               onTap: () {
                 ChatController.to.viewType.value = ViewType.allChat;
-                ChatController.to.appbarTitle.value = 'All Chat';
+                ChatController.to.appbarTitle.value = 'All Chat'.tr;
                 Get.back();
               },
             ),
@@ -68,7 +68,7 @@ class CustomSidebar extends StatelessWidget {
 
                 return SidebarContent(
                   leadingIcon: Carbon.archive,
-                  title: 'Archived Chat',
+                  title: 'Archived Chat'.tr,
                   customColor:
                       controller.isNotEmpty ? MainColor.black : MainColor.grey,
                   disableOntap: controller.isNotEmpty ? false : true,
@@ -76,7 +76,8 @@ class CustomSidebar extends StatelessWidget {
                       ? () {
                           ChatController.to.viewType.value =
                               ViewType.archivedChat;
-                          ChatController.to.appbarTitle.value = 'Archived Chat';
+                          ChatController.to.appbarTitle.value =
+                              'Archived Chat'.tr;
                           Get.back();
                         }
                       : () {},
@@ -86,17 +87,17 @@ class CustomSidebar extends StatelessWidget {
             const Divider(indent: 20, endIndent: 25),
             SidebarContent(
               leadingIcon: Carbon.user,
-              title: 'Profile',
+              title: 'Profile'.tr,
               onTap: () {
                 ChatController.to.viewType.value = ViewType.profile;
-                ChatController.to.appbarTitle.value = 'Profile & Settings';
+                ChatController.to.appbarTitle.value = 'Profile & Settings'.tr;
                 Get.back();
               },
             ),
             const Divider(indent: 20, endIndent: 25),
             SidebarContent(
               leadingIcon: Carbon.logout,
-              title: 'Logout',
+              title: 'Logout'.tr,
               customColor: MainColor.danger,
               onTap: () async {
                 EasyLoading.show();

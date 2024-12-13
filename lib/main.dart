@@ -1,3 +1,4 @@
+import 'package:chad_ai/configs/localization/localization.dart';
 import 'package:chad_ai/configs/pages/main_page.dart';
 import 'package:chad_ai/configs/routes/main_route.dart';
 import 'package:chad_ai/configs/themes/main_theme.dart';
@@ -7,6 +8,7 @@ import 'package:chad_ai/global_controllers/analytics_controller.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -79,6 +81,16 @@ class MyApp extends StatelessWidget {
         defaultTransition: Transition.native,
         getPages: MainPage.main,
         initialBinding: GlobalBinding(),
+        translations: Localization(),
+          locale: Localization.defaultLocale,
+          fallbackLocale: Localization.fallbackLocale,
+          supportedLocales: Localization.locales,
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+
       ),
     );
   }

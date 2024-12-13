@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:chad_ai/features/chat/repositories/chat_repositories.dart';
 import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:chad_ai/utils/services/hive_service.dart';
@@ -25,6 +24,10 @@ class ChatController extends GetxController {
   late String currentPassword;
   late String currentAvatar;
   RxString currentName = ''.obs;
+  Rx<ViewType> viewType = ViewType.allChat.obs;
+  RxString appbarTitle = 'All Chat'.tr.obs;
+  RxInt languageRadioValue = 1.obs;
+  RxInt themeRadioValue = 1.obs;
 
   TextEditingController newNameController = TextEditingController();
   TextEditingController feedbackController = TextEditingController();
@@ -37,6 +40,7 @@ class ChatController extends GetxController {
     'retypeNew': true,
   }.obs;
 
+  ///------------------Init---------------------
   @override
   void onInit() {
     super.onInit();
@@ -53,11 +57,40 @@ class ChatController extends GetxController {
     updateArchivedChat();
   }
 
+  ///------------------Tools---------------------
+  //Obscure toggler
   void toggleObscure(String fieldKey) {
     obscureStates[fieldKey] = !(obscureStates[fieldKey] ?? true);
   }
 
-  //Get
+  //Chatsession splitter
+  List<Map<String, dynamic>> splitChatSession(ChatSession chatSession) {
+    List<Map<String, dynamic>> extractedText = [];
+
+    for (var i = 0; i < chatSession.history.length; i++) {
+      var data = UtilityService.extractMessageText(
+        chatSession,
+        i,
+        ChatDataType.text,
+      );
+      var role = UtilityService.extractMessageText(
+        chatSession,
+        i,
+        ChatDataType.role,
+      );
+
+      extractedText.add(
+        {
+          'data': data,
+          'role': role,
+        },
+      );
+    }
+    return extractedText;
+  }
+
+  ///------------------Hive Related---------------------
+  //Get chat
   void getChats() {
     var chats = HiveService.getChats(email: currentEmail);
 
@@ -65,7 +98,31 @@ class ChatController extends GetxController {
     chatList.refresh();
   }
 
-  // Api Post
+  //Delete
+  void deleteChat(int index, {bool archived = false}) {
+    HiveService.deleteChat(
+      email: ChatController.to.currentEmail,
+      chatIndex: index,
+    );
+    ChatController.to.getChats();
+
+    if (!archived) {
+      Get.back();
+    }
+    Get.showSnackbar(
+      GetSnackBar(
+        title: archived ? 'Chat Archived'.tr : 'Chat Deleted'.tr,
+        message: archived
+            ? 'Chat Succesfully Archived'.tr
+            : 'Chat Succesfully Deleted'.tr,
+        duration: Duration(seconds: 1),
+        snackPosition: SnackPosition.TOP,
+      ),
+    );
+  }
+
+  ///------------------API Related---------------------
+  //Post
   void apiSaveChat(int index) async {
     Get.back();
     EasyLoading.show();
@@ -92,7 +149,7 @@ class ChatController extends GetxController {
     }
   }
 
-  // Api Delete
+  //Delete chat
   void apiDeleteChat(int index) async {
     try {
       Get.back();
@@ -106,14 +163,14 @@ class ChatController extends GetxController {
         await updateArchivedChat();
         if (ChatController.to.archivedChat.value.isEmpty) {
           ChatController.to.viewType.value = ViewType.allChat;
-          ChatController.to.appbarTitle.value = 'All Chat';
+          ChatController.to.appbarTitle.value = 'All Chat'.tr;
         }
         EasyLoading.dismiss();
 
         Get.showSnackbar(
           GetSnackBar(
-            title: 'Chat Deleted',
-            message: 'Chat Deleted from Database',
+            title: 'Chat Deleted'.tr,
+            message: 'Chat Deleted from Database'.tr,
             duration: Duration(seconds: 1),
             snackPosition: SnackPosition.TOP,
           ),
@@ -128,7 +185,7 @@ class ChatController extends GetxController {
     }
   }
 
-  //Update db
+  //Put password & pin
   Future<void> apiUpdateSecurity({required bool isPin}) async {
     try {
       EasyLoading.show();
@@ -146,10 +203,10 @@ class ChatController extends GetxController {
         Get.back();
         Get.showSnackbar(
           GetSnackBar(
-            title: 'Success',
+            title: 'Success'.tr,
             message: isPin
-                ? 'Pin Changed Successfully'
-                : 'Password Changed Successfully',
+                ? 'Pin Changed Successfully'.tr
+                : 'Password Changed Successfully'.tr,
             duration: Duration(seconds: 1),
             snackPosition: SnackPosition.TOP,
           ),
@@ -166,7 +223,7 @@ class ChatController extends GetxController {
     }
   }
 
-  //update name
+  //Put name
   Future<void> apiUpdateName() async {
     try {
       EasyLoading.show();
@@ -181,8 +238,8 @@ class ChatController extends GetxController {
         Get.back();
         Get.showSnackbar(
           GetSnackBar(
-            title: 'Success',
-            message: 'Nickname Changed Successfully',
+            title: 'Success'.tr,
+            message: 'Nickname Changed Successfully'.tr,
             duration: Duration(seconds: 1),
             snackPosition: SnackPosition.TOP,
           ),
@@ -199,54 +256,7 @@ class ChatController extends GetxController {
     }
   }
 
-  //Delete
-  void deleteChat(int index, {bool archived = false}) {
-    HiveService.deleteChat(
-      email: ChatController.to.currentEmail,
-      chatIndex: index,
-    );
-    ChatController.to.getChats();
-
-    if (!archived) {
-      Get.back();
-    }
-    Get.showSnackbar(
-      GetSnackBar(
-        title: archived ? 'Chat Archived' : 'Chat Deleted',
-        message:
-            archived ? 'Chat Succesfully Archived' : 'Chat Succesfully Deleted',
-        duration: Duration(seconds: 1),
-        snackPosition: SnackPosition.TOP,
-      ),
-    );
-  }
-
-  List<Map<String, dynamic>> splitChatSession(ChatSession chatSession) {
-    List<Map<String, dynamic>> extractedText = [];
-
-    for (var i = 0; i < chatSession.history.length; i++) {
-      var data = UtilityService.extractMessageText(
-        chatSession,
-        i,
-        ChatDataType.text,
-      );
-      var role = UtilityService.extractMessageText(
-        chatSession,
-        i,
-        ChatDataType.role,
-      );
-
-      extractedText.add(
-        {
-          'data': data,
-          'role': role,
-        },
-      );
-    }
-
-    return extractedText;
-  }
-
+  //Get chat
   Future<void> updateArchivedChat() async {
     try {
       var response = await ChatRepositories().getArchivedChat(
@@ -257,11 +267,12 @@ class ChatController extends GetxController {
         archivedChat.value = List<Map<String, dynamic>>.from(response.data);
         archivedChat.refresh();
       }
-    } catch (e) {
-      print(e);
+    } catch (e, stacktrace) {
+      SentryService.handleAuthError(e, stacktrace);
     }
   }
 
+  //post feedback
   void postFeedback() async {
     EasyLoading.show();
     var response = await ChatRepositories().sendFeedback(
@@ -278,8 +289,8 @@ class ChatController extends GetxController {
 
       Get.showSnackbar(
         GetSnackBar(
-          title: 'Feedback Sent',
-          message: 'Thanks for your feedback!',
+          title: 'Feedback Sent'.tr,
+          message: 'Thanks for your feedback!'.tr,
           duration: Duration(seconds: 1),
           snackPosition: SnackPosition.TOP,
         ),
@@ -287,18 +298,12 @@ class ChatController extends GetxController {
     } else {
       Get.showSnackbar(
         GetSnackBar(
-          title: 'Something Wrong!',
-          message: 'Something Wrong!',
+          title: 'Something Wrong!'.tr,
+          message: 'Something Wrong!'.tr,
           duration: Duration(seconds: 1),
           snackPosition: SnackPosition.TOP,
         ),
       );
     }
   }
-
-  //Sidebar
-  Rx<ViewType> viewType = ViewType.allChat.obs;
-
-  //Appbar
-  RxString appbarTitle = 'All Chat'.obs;
 }

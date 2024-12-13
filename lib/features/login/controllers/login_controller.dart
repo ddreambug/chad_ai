@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:chad_ai/features/login/repositories/login_repository.dart';
 import 'package:chad_ai/global_controllers/global_controller.dart';
+import 'package:chad_ai/shared/widgets/otp_dialog.dart';
 import 'package:chad_ai/utils/services/hive_service.dart';
 import 'package:chad_ai/utils/services/sentry_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +18,11 @@ class LoginController extends GetxController {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController pinController = TextEditingController();
+
+  Map<String, dynamic>? userData;
+  int? userPin;
+  RxBool isValidated = false.obs;
   RxInt pinLength = 0.obs;
   var obscureStates = {
     'password': true,
@@ -34,8 +40,12 @@ class LoginController extends GetxController {
   }
 
   Future<void> _navigateToChat({String? socialEmail, String? avatar}) async {
-    var additionalData =
-        await getAdditionalData(email: socialEmail ?? emailController.text);
+    var additionalData = await getAdditionalData(
+      email: socialEmail ?? emailController.text,
+    );
+    userPin = additionalData['pin'];
+    userData = additionalData;
+
     Get.offNamed(
       'chat',
       arguments: {
@@ -49,6 +59,18 @@ class LoginController extends GetxController {
             'https://st.depositphotos.com/1008402/58769/i/450/depositphotos_587692484-stock-illustration-illustration-smiling-woman-cartoon-close.jpg'
       },
     );
+  }
+
+  void onPinValid() {
+    Get.showSnackbar(
+      GetSnackBar(
+        title: 'Pin Valid',
+        message: 'Pin Valid',
+        snackPosition: SnackPosition.TOP,
+        duration: Duration(seconds: 1),
+      ),
+    );
+    _navigateToChat();
   }
 
   Future<Map<String, dynamic>> getAdditionalData(
@@ -94,19 +116,24 @@ class LoginController extends GetxController {
     required String password,
     required BuildContext context,
   }) async {
+    print('sign in trigerred');
     EasyLoading.show();
     var userData = await LoginRepository().getUserData();
     if (userData.statusCode == 200) {
       final List users = userData.data;
-      final user = users.firstWhere(
-        (u) => u['email'] == email,
+      final user = await users.firstWhere(
+        (u) => u['email'] == email && u['password'] == password,
         orElse: () => null,
       );
 
       if (user != null) {
+        userPin = user['pin'];
         EasyLoading.dismiss();
-        _navigateToChat();
+        Get.dialog(
+          OtpDialog(),
+        );
       } else {
+        print('usernull');
         EasyLoading.dismiss();
         PanaraInfoDialog.show(
           // ignore: use_build_context_synchronously
@@ -128,7 +155,12 @@ class LoginController extends GetxController {
     //check internet
     if (!await _checkInternetConnection()) {
       Get.showSnackbar(
-        GetSnackBar(title: 'No Internet'),
+        GetSnackBar(
+          title: 'No Internet',
+          message: 'Check your connection',
+          snackPosition: SnackPosition.TOP,
+          duration: Duration(seconds: 1),
+        ),
       );
       SentryService.handleAuthError('No Internet!', StackTrace.current);
       return;

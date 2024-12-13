@@ -98,8 +98,8 @@ class ChatDetailController extends GetxController {
     Get.back();
     Get.showSnackbar(
       GetSnackBar(
-        title: 'Chat Deleted',
-        message: 'Chat Succesfully Deleted',
+        title: 'Chat Deleted'.tr,
+        message: 'Chat Succesfully Deleted'.tr,
         duration: Duration(seconds: 1),
         snackPosition: SnackPosition.TOP,
       ),

@@ -18,7 +18,7 @@ class ArchiveDetailView extends StatelessWidget {
 
     return Scaffold(
       appBar: CustomAppbar(
-        title: 'Archived Chat Details ',
+        title: 'Archived Chat Details'.tr,
         useAction: true,
         onTap: () {
           Get.bottomSheet(BottomsheetType.archivedChat(

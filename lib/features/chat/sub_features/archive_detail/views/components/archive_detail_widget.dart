@@ -23,9 +23,10 @@ class ArchiveDetailWidget extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.only(top: 5.w, bottom: 10.w),
               width: 350.w,
-              decoration: BoxDecoration(color: Colors.white),
+              decoration: BoxDecoration(color: MainColor.primary),
               child: Text(
-                'Currently you can only see your chat history, stay tunes for further updates',
+                'Currently you can only see your chat history, stay tunes for further updates'
+                    .tr,
                 textAlign: TextAlign.center,
                 style: CustomTextStyle.w400.copyWith(
                   color: MainColor.textGrey,

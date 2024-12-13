@@ -3,7 +3,7 @@ import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:chad_ai/shared/widgets/app_info.dart';
 import 'package:chad_ai/shared/widgets/bottomsheet_type.dart';
-import 'package:chad_ai/shared/widgets/custom_text_buttom.dart';
+import 'package:chad_ai/shared/widgets/custom_text_button.dart';
 import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -59,29 +59,48 @@ class ProfileDetails extends StatelessWidget {
               ],
             ),
             SizedBox(height: 20.w),
-            CustomTextButtom(
-              title: 'Email',
+            CustomTextButton(
+              title: 'Email'.tr,
               secondTitle: controller.currentEmail,
               secondTitleColor: MainColor.purple,
               ontap: () {},
             ),
             const Divider(),
-            CustomTextButtom(
-              title: 'Theme',
-              secondTitle: 'System default',
-              ontap: () {},
-              icon: Carbon.arrow_up_right,
+            // CustomTextButton(
+            //   title: 'Theme'.tr,
+            //   secondTitle: ChatController.to.themeRadioValue.value == 1
+            //       ? 'System default'.tr
+            //       : ChatController.to.themeRadioValue.value == 2
+            //           ? 'Light mode'.tr
+            //           : 'Dark mode'.tr,
+            //   ontap: () {},
+            //   icon: Carbon.arrow_up_right,
+            // ),
+            // const Divider(),
+            Obx(
+              () {
+                var currentLanguageValue =
+                    ChatController.to.languageRadioValue.value;
+
+                return CustomTextButton(
+                  title: 'Language'.tr,
+                  secondTitle: currentLanguageValue == 1
+                      ? 'System default'.tr
+                      : currentLanguageValue == 2
+                          ? 'English'.tr
+                          : 'Indonesia'.tr,
+                  ontap: () {
+                    Get.bottomSheet(
+                      BottomsheetType.changeLanguage(),
+                    );
+                  },
+                  icon: Carbon.arrow_up_right,
+                );
+              },
             ),
             const Divider(),
-            CustomTextButtom(
-              title: 'Language',
-              secondTitle: 'System default',
-              ontap: () {},
-              icon: Carbon.arrow_up_right,
-            ),
-            const Divider(),
-            CustomTextButtom(
-              title: 'Change Pin',
+            CustomTextButton(
+              title: 'Change Pin'.tr,
               ontap: () {
                 Get.bottomSheet(
                   isDismissible: false,
@@ -97,8 +116,8 @@ class ProfileDetails extends StatelessWidget {
                   : MainColor.black,
             ),
             const Divider(),
-            CustomTextButtom(
-              title: 'Change Password',
+            CustomTextButton(
+              title: 'Change Password'.tr,
               ontap: () {
                 Get.bottomSheet(
                   isDismissible: false,
@@ -114,10 +133,11 @@ class ProfileDetails extends StatelessWidget {
                   : MainColor.black,
             ),
             const Divider(),
-            CustomTextButtom(
-              title: 'Send Feedback',
+            CustomTextButton(
+              title: 'Send Feedback'.tr,
               description:
-                  'Chatbot AI can make mistakes. Consider checking important information and send us your feedback.',
+                  'Chatbot AI can make mistakes. Consider checking important information and send us your feedback.'
+                      .tr,
               ontap: () {
                 Get.bottomSheet(
                   isDismissible: false,

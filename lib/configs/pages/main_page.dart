@@ -23,7 +23,7 @@ abstract class MainPage {
       name: MainRoute.signUp,
       page: () => const SignUpView(),
       binding: SignUpBinding(),
-      transition: Transition.fadeIn,
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: MainRoute.privacyPolicy,

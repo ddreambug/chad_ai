@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:chad_ai/configs/themes/main_color.dart';
 import 'package:chad_ai/features/login/controllers/login_controller.dart';
 import 'package:chad_ai/features/sign_up/repositories/sign_up_repository.dart';
-import 'package:chad_ai/features/sign_up/views/components/otp_dialog.dart';
+import 'package:chad_ai/shared/widgets/otp_dialog.dart';
 import 'package:chad_ai/features/sign_up/views/ui/sign_up_view.dart';
 import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:chad_ai/utils/services/hive_service.dart';

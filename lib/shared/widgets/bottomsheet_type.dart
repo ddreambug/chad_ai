@@ -1,10 +1,13 @@
+import 'package:chad_ai/configs/localization/localization.dart';
 import 'package:chad_ai/configs/themes/main_color.dart';
+import 'package:chad_ai/constants/cores/assets/image_constant.dart';
 import 'package:chad_ai/features/chat/controllers/chat_controller.dart';
 import 'package:chad_ai/shared/styles/custom_text_style.dart';
 import 'package:chad_ai/shared/widgets/custom_bottom_sheet.dart';
 import 'package:chad_ai/shared/widgets/custom_button.dart';
-import 'package:chad_ai/shared/widgets/custom_text_buttom.dart';
+import 'package:chad_ai/shared/widgets/custom_text_button.dart';
 import 'package:chad_ai/shared/widgets/custom_text_field.dart';
+import 'package:chad_ai/shared/widgets/custom_text_radio.dart';
 import 'package:chad_ai/utils/enums/enum.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,18 +24,18 @@ class BottomsheetType {
     required VoidCallback onDelete,
   }) {
     return CustomBottomSheet(
-      title: 'Chat Settings',
+      title: 'Chat Settings'.tr,
       initSize: 0.45,
       widget: Column(
         children: [
-          CustomTextButtom(
-            title: 'Archive Chat',
+          CustomTextButton(
+            title: 'Archive Chat'.tr,
             icon: Carbon.archive,
             ontap: onArchive,
           ),
           Divider(),
-          CustomTextButtom(
-            title: 'Delete Chat',
+          CustomTextButton(
+            title: 'Delete Chat'.tr,
             icon: Carbon.trash_can,
             ontap: onDelete,
             color: MainColor.danger,
@@ -46,7 +49,7 @@ class BottomsheetType {
     required VoidCallback onDelete,
   }) {
     return CustomBottomSheet(
-      title: 'Chat Settings',
+      title: 'Chat Settings'.tr,
       initSize: 0.35,
       widget: Column(
         children: [
@@ -55,7 +58,7 @@ class BottomsheetType {
             child: Row(
               children: [
                 Text(
-                  'Delete Chat',
+                  'Delete Chat'.tr,
                   style: CustomTextStyle.w500.copyWith(
                     color: MainColor.danger,
                   ),
@@ -77,7 +80,7 @@ class BottomsheetType {
   static Widget changeName() {
     var formKey = GlobalKey<FormState>();
     return CustomBottomSheet(
-      title: 'Change Nickname',
+      title: 'Change Nickname'.tr,
       initSize: 0.5,
       widget: Form(
         key: formKey,
@@ -85,12 +88,12 @@ class BottomsheetType {
           children: [
             CustomTextField(
               controller: ChatController.to.newNameController,
-              hintText: 'New Nickname',
+              hintText: 'New Nickname'.tr,
               isProfileEdit: true,
               customHeight: 40,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your new nickname';
+                  return 'Please enter your new nickname'.tr;
                 }
                 return null;
               },
@@ -106,7 +109,7 @@ class BottomsheetType {
                       Get.back();
                       ChatController.to.newNameController.clear();
                     },
-                    title: 'Cancel',
+                    title: 'Cancel'.tr,
                     buttonWidth: 160,
                     buttonHeight: 50,
                   ),
@@ -118,7 +121,7 @@ class BottomsheetType {
                         ChatController.to.newNameController.clear();
                       }
                     },
-                    title: 'Send',
+                    title: 'Send'.tr,
                     buttonWidth: 160,
                     buttonHeight: 50,
                     buttonColor: MainColor.black,
@@ -135,7 +138,7 @@ class BottomsheetType {
   static Widget sendFeedback() {
     var formKey = GlobalKey<FormState>();
     return CustomBottomSheet(
-      title: 'Feedback',
+      title: 'Feedback'.tr,
       initSize: 0.63,
       widget: Form(
         key: formKey,
@@ -143,13 +146,13 @@ class BottomsheetType {
           children: [
             CustomTextField(
               controller: ChatController.to.feedbackController,
-              hintText: 'Enter your feedback here...',
+              hintText: 'Enter your feedback here...'.tr,
               isProfileEdit: true,
               customHeight: 100,
               isArea: true,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your feedback';
+                  return 'Please enter your feedback'.tr;
                 }
                 return null;
               },
@@ -165,7 +168,7 @@ class BottomsheetType {
                       Get.back();
                       ChatController.to.feedbackController.clear();
                     },
-                    title: 'Cancel',
+                    title: 'Cancel'.tr,
                     buttonWidth: 160,
                     buttonHeight: 50,
                   ),
@@ -176,7 +179,7 @@ class BottomsheetType {
                         ChatController.to.postFeedback();
                       }
                     },
-                    title: 'Send',
+                    title: 'Send'.tr,
                     buttonWidth: 160,
                     buttonHeight: 50,
                     buttonColor: MainColor.black,
@@ -194,7 +197,7 @@ class BottomsheetType {
     var formKey = GlobalKey<FormState>();
     String title = securityType == SecurityType.pin ? 'Pin' : 'Password';
     return CustomBottomSheet(
-      title: 'Change $title',
+      title: 'Change $title'.tr,
       initSize: 0.75,
       widget: Form(
         key: formKey,
@@ -202,7 +205,7 @@ class BottomsheetType {
           children: [
             CustomTextField(
               controller: ChatController.to.securityController,
-              hintText: 'Current $title',
+              hintText: 'Current $title'.tr,
               obscureType: 'current',
               isProfileEdit: true,
               customHeight: 40,
@@ -212,9 +215,9 @@ class BottomsheetType {
                     : ChatController.to.currentPin.toString();
 
                 if (value == null || value.isEmpty) {
-                  return 'Enter your current $title';
+                  return 'Enter your current $title'.tr;
                 } else if (value != currentSecurity) {
-                  return '$title Mismatch, Please Recheck';
+                  return '$title Mismatch, Please Recheck'.tr;
                 }
                 return null;
               },
@@ -222,21 +225,21 @@ class BottomsheetType {
             SizedBox(height: 10.w),
             CustomTextField(
               controller: ChatController.to.newSecurityController,
-              hintText: 'New $title',
+              hintText: 'New $title'.tr,
               obscureType: 'new',
               isProfileEdit: true,
               customHeight: 40,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Enter your new $title';
+                  return 'Enter your new $title'.tr;
                 } else if (title == 'Pin') {
                   if (!RegExp(r"^\d{4}$").hasMatch(value) ||
                       value.length != 4) {
-                    return 'PIN must be a 4-digit number';
+                    return 'PIN must be a 4-digit number'.tr;
                   }
                 } else if (title == 'Password') {
                   if (value.length < 8) {
-                    return 'New password minimum is 8 Character';
+                    return 'New password minimum is 8 Character'.tr;
                   }
                 }
 
@@ -247,17 +250,17 @@ class BottomsheetType {
 
             CustomTextField(
               controller: ChatController.to.retypeNewSecurityController,
-              hintText: 'Retype New $title',
+              hintText: 'Retype New $title'.tr,
               obscureType: 'retypeNew',
               isProfileEdit: true,
               customHeight: 40,
               validator: (value) {
                 if (title == 'Password' &&
                     value != ChatController.to.newSecurityController.text) {
-                  return 'Password didnt match';
+                  return 'Password didnt match'.tr;
                 } else if (title == 'Pin' &&
                     value != ChatController.to.newSecurityController.text) {
-                  return 'Pin didnt match';
+                  return 'Pin didnt match'.tr;
                 }
                 return null;
               },
@@ -275,7 +278,7 @@ class BottomsheetType {
                       ChatController.to.newSecurityController.clear();
                       ChatController.to.retypeNewSecurityController.clear();
                     },
-                    title: 'Cancel',
+                    title: 'Cancel'.tr,
                     buttonWidth: 160,
                     buttonHeight: 50,
                   ),
@@ -292,7 +295,7 @@ class BottomsheetType {
                         ChatController.to.retypeNewSecurityController.clear();
                       }
                     },
-                    title: 'Send',
+                    title: 'Send'.tr,
                     buttonWidth: 160,
                     buttonHeight: 50,
                     buttonColor: MainColor.black,
@@ -302,6 +305,50 @@ class BottomsheetType {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  static Widget changeLanguage() {
+    return CustomBottomSheet(
+      initSize: 0.55,
+      widget: Column(
+        children: [
+          CustomTextRadio(
+            title: 'System default'.tr,
+            radioValue: 1,
+            onChanged: (value) {
+              if (value != null) {
+                ChatController.to.languageRadioValue.value = value;
+                Localization.changeLocale('English');
+              }
+            },
+          ),
+          Divider(),
+          CustomTextRadio(
+            svgImage: ImageConstant.flagEn,
+            title: 'English'.tr,
+            radioValue: 2,
+            onChanged: (value) {
+              if (value != null) {
+                ChatController.to.languageRadioValue.value = value;
+                Localization.changeLocale('English');
+              }
+            },
+          ),
+          Divider(),
+          CustomTextRadio(
+            svgImage: ImageConstant.flagId,
+            title: 'Indonesia'.tr,
+            radioValue: 3,
+            onChanged: (value) {
+              if (value != null) {
+                ChatController.to.languageRadioValue.value = value;
+                Localization.changeLocale('Indonesia');
+              }
+            },
+          ),
+        ],
       ),
     );
   }

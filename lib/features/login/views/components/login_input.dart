@@ -90,12 +90,12 @@ class LoginInput extends StatelessWidget {
               onPressed: () {
                 if (formKey.currentState?.validate() ?? false) {
                   log('Form is valid!');
-                  
+
                   LoginController.to.signIn(
-                    email: LoginController.to.emailController.text,
-                    password: LoginController.to.passwordController.text,
-                    context: context,
-                  );
+                      email: LoginController.to.emailController.text,
+                      password: LoginController.to.passwordController.text,
+                      // ignore: use_build_context_synchronously
+                      context: context);
                 } else {
                   log('Form is invalid!');
                   PanaraInfoDialog.show(

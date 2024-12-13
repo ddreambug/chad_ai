@@ -34,7 +34,8 @@ class ChatDetailWidget extends StatelessWidget {
                     margin: EdgeInsets.only(top: 20.w),
                     width: 350.w,
                     child: Text(
-                      'Un-Archived chat is temporary that could lead to lost of history when changing devices. \n\nConsider Archiving your chat if you plan to save it on our Database',
+                      'Un-Archived chat is temporary that could lead to lost of history when changing devices. \n\nConsider Archiving your chat if you plan to save it on our Database'
+                          .tr,
                       textAlign: TextAlign.center,
                       style: CustomTextStyle.w400.copyWith(
                         color: MainColor.textGrey,

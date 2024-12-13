@@ -5,8 +5,8 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
 
-class CustomTextButtom extends StatelessWidget {
-  const CustomTextButtom({
+class CustomTextButton extends StatelessWidget {
+  const CustomTextButton({
     super.key,
     required this.title,
     this.icon = Carbon.carbon,
@@ -34,7 +34,7 @@ class CustomTextButtom extends StatelessWidget {
       child: InkWell(
         onTap: isGoogle ? null : ontap,
         child: SizedBox(
-          height: description == '' ? 25 : 50,
+          height: description == '' ? 25 : 60,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,

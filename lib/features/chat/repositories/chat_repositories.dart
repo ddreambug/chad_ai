@@ -96,9 +96,7 @@ class ChatRepositories {
     try {
       final response = await dio.put(
         '/users/$userId',
-        data: [
-          {"username": newName}
-        ],
+        data: {"username": newName},
       );
 
       if (response.statusCode == 200) {

@@ -30,7 +30,7 @@ class ChatInput extends StatelessWidget {
                 style: CustomTextStyle.w500.copyWith(fontSize: 16.sp),
                 decoration: InputDecoration(
                   isDense: true,
-                  hintText: 'Ask Me Anything...',
+                  hintText: 'Ask Me Anything...'.tr,
                   contentPadding: EdgeInsets.fromLTRB(15, 20, 15, 5).w,
                   hintStyle: CustomTextStyle.w500.copyWith(fontSize: 16.sp),
                   border: OutlineInputBorder(

@@ -21,7 +21,7 @@ class AddChatButton extends StatelessWidget {
             ChatController.to.getChats();
           },
           label: Text(
-            'Add New Chat',
+            'Add New Chat'.tr,
             style: CustomTextStyle.w400.copyWith(
               fontSize: 16.sp,
               color: MainColor.black,
